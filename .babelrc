@@ -6,8 +6,8 @@
             "globals": ["Error", "Array"]
         }],
         ["module-alias", [
-            { "src": "./test", "expose": "@" },
-            { "src": "./src", "expose": "~" }
+            { "src": "./server", "expose": "~" },
+            { "src": "./app", "expose": "$" }
         ]]
     ],
     "ignore": [
