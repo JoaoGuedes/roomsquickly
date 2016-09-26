@@ -1,0 +1,32 @@
+[
+  {
+    "name": "Apextri",
+    "image": "http://placehold.it/32x32",
+    "location": "Kaka, USA",
+    "minimum_bid": 49
+  },
+  {
+    "name": "Intradisk",
+    "image": "http://placehold.it/32x32",
+    "location": "Elrama, USA",
+    "minimum_bid": 17
+  },
+  {
+    "name": "Zepitope",
+    "image": "http://placehold.it/32x32",
+    "location": "Rosewood, USA",
+    "minimum_bid": 26
+  },
+  {
+    "name": "Telepark",
+    "image": "http://placehold.it/32x32",
+    "location": "Wells, USA",
+    "minimum_bid": 17
+  },
+  {
+    "name": "Zidox",
+    "image": "http://placehold.it/32x32",
+    "location": "Celeryville, USA",
+    "minimum_bid": 34
+  }
+]
