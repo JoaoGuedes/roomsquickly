@@ -2,6 +2,13 @@ import _ from 'lodash';
 
 export default class Presenter {
 
+    findWinningBid([first, second, ...rest]) {
+        if (!second || first.bid > second.bid * 1.05) {
+            return first;
+        }
+        return this.findWinningBid([second, ...rest]);
+    }
+
     present(data) {
         if (_.isEmpty(data)) {
             return data;

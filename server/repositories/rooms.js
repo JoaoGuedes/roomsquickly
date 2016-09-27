@@ -56,7 +56,7 @@ export default class Repository {
             const duration = nconf.get('AUCTION_DURATION_IN_MINUTES'),
                 finishTime = start + (duration * MINUTE);
             end = end || finishTime;  //Set duration of auction
-            
+
             if (start < NOW) {
                 return reject(new HTTPError('Auction date cannot be in the past').BadRequest());
             }
@@ -92,7 +92,7 @@ export default class Repository {
         });
     }
 
-    update({ id, ...values }) {
+    /*update({ id, ...values }) {
         return this.getById(id)
             .then(([room]) => {
                 if (!room) {
@@ -104,7 +104,7 @@ export default class Repository {
                 };
                 return [room];
             });
-    }
+    }*/
 
     bid({ id, bid }) {
         return this.getById(id)
@@ -119,10 +119,20 @@ export default class Repository {
                     if ((room.end - Date.now()) < 1*MINUTE) {
                         room.end += 1*MINUTE;
                     }
-                    room.bids.push({
+                    const bid = {
                         bid_id: uuid.v4(),
                         bid
-                    });
+                    };
+
+                    if (_.isEmpty(room.bids)) {
+                        room.highestBid = bid;
+                    }
+                    else {
+                        if (bid > (room.highestBid * 1.05)) {
+                            room.highestBid = bid;
+                        }
+                    }
+                    room.bids.push(bid);
                 }
 
                 return [room];

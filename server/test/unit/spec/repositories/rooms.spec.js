@@ -92,6 +92,14 @@ test('Repository.bid', (t) => {
 test('Repository.bid', (t) => {
     beforeEach();
     t.plan(1);
+    repo.bid({ id: 'foo', bid: 30 })
+        .then(() => t.fail())
+        .catch((err) => t.true(err instanceof HTTPError, 'should fail on invalid room ID'));
+});
+
+test('Repository.bid', (t) => {
+    beforeEach();
+    t.plan(1);
     const duration = 2,
         now = Date.now(),
         end = now + (duration * 1000*60);
