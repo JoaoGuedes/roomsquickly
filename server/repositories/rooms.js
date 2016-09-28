@@ -12,6 +12,27 @@ const MINUTE            = 1000*60,
     DEFAULT_ROOM_NAME   = 'Untitled Room',
     DEFAULT_ROOM_IMAGE  = 'https://penang.equatorial.com/wp-content/uploads/sites/9/2015/06/2016-09-02_hep_deluxe_room-400x200.jpg';
 
+const _isBidValid = ({ value, minimum }) => {
+    if (value < minimum) {
+        throw new HTTPError(`Invalid bid. Minimum value must be ${minimum}`).BadRequest();
+    }
+};
+
+const _getAuctionExtension = ({ end, limit }) => {
+    return ((end - Date.now()) < limit) ? 1*MINUTE : 0;
+};
+
+const _computeHighestBid = ({ room, bid }) => {
+    if (_.isEmpty(room.bids)) {
+        room.highestBid = bid;
+    }
+    else {
+        if (bid.value > (room.highestBid.value * 1.05)) {
+            room.highestBid = bid;
+        }
+    }
+};
+
 export default class Repository {
 
     /**
@@ -106,35 +127,31 @@ export default class Repository {
             });
     }*/
 
-    bid({ id, bid }) {
+    bid({ id, value }) {
         return this.getById(id)
-            .then(([room]) => {
+            .then(([room]) => { //Validations
                 if (!room) {
                     throw new HTTPError('Room not found').NotFound();
                 }
-                if (bid && room.active) {
-                    if (bid < room.minimum_bid) {
-                        throw new HTTPError(`Invalid bid. Minimum value must be ${room.minimum_bid}`).BadRequest();
-                    }
-                    if ((room.end - Date.now()) < 1*MINUTE) {
-                        room.end += 1*MINUTE;
-                    }
-                    const bid = {
-                        bid_id: uuid.v4(),
-                        bid
-                    };
-
-                    if (_.isEmpty(room.bids)) {
-                        room.highestBid = bid;
-                    }
-                    else {
-                        if (bid > (room.highestBid * 1.05)) {
-                            room.highestBid = bid;
-                        }
-                    }
-                    room.bids.push(bid);
+                if (!value) {
+                    throw new HTTPError('Missing bid value').BadRequest();
                 }
+                if (!room.active) {
+                    throw new HTTPError('Auction as already ended').BadRequest();
+                }
+                return room;
+            })
+            .then((room) => {   //Apply business rules
+                _isBidValid({ value, minimum: room.minimum_bid });
+                room.end += _getAuctionExtension({ end: room.end, limit: 1*MINUTE });
 
+                const bid = {
+                    bid_id: uuid.v4(),
+                    value
+                };
+
+                _computeHighestBid({ room, bid });
+                room.bids.push(bid);
                 return [room];
             });
     }

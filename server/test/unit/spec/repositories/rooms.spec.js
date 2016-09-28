@@ -83,7 +83,7 @@ test('Repository.bid', (t) => {
     repo.create({ minimum_bid: 100 })
         .then(([room]) => repo.bid({
             id: room.id,
-            bid: 30
+            value: 30
         }))
         .then(() => t.fail())
         .catch((err) => t.true(err instanceof HTTPError, 'should fail on invalid bid'));
@@ -92,7 +92,7 @@ test('Repository.bid', (t) => {
 test('Repository.bid', (t) => {
     beforeEach();
     t.plan(1);
-    repo.bid({ id: 'foo', bid: 30 })
+    repo.bid({ id: 'foo', value: 30 })
         .then(() => t.fail())
         .catch((err) => t.true(err instanceof HTTPError, 'should fail on invalid room ID'));
 });
@@ -107,7 +107,7 @@ test('Repository.bid', (t) => {
     repo.create({ end, minimum_bid: 100 })
         .then(([room]) => repo.bid({
             id: room.id,
-            bid: 105
+            value: 105
         }))
         .then(([room]) => {
             t.equal(room.end, end, 'auction duration should remain the same');
@@ -125,11 +125,81 @@ test('Repository.bid', (t) => {
     repo.create({ end, minimum_bid: 100 })
         .then(([room]) => repo.bid({
             id: room.id,
-            bid: 105
+            value: 105
         }))
         .then(([room]) => {
             const extendedTime = end + (1 * 1000*60);
             t.equal(room.end, extendedTime, 'should extend 1 minute on last minute of auction');
+        })
+        .catch((err) => t.fail(err));
+});
+
+test('Repository.bid', (t) => {
+    beforeEach();
+    t.plan(1);
+    repo.create({ minimum_bid: 100 })
+        .then(([room]) => repo.bid({
+            id: room.id,
+            value: 100
+        }))
+        .then(([room]) => repo.bid({
+            id: room.id,
+            value: 100
+        }))
+        .then(([room]) => repo.bid({
+            id: room.id,
+            value: 150
+        }))
+        .then(([room]) => {
+            t.equal(room.highestBid.value, 150, '150 should be the highest bid');
+        })
+        .catch((err) => t.fail(err));
+});
+
+test('Repository.bid', (t) => {
+    beforeEach();
+    t.plan(1);
+    repo.create({ minimum_bid: 100 })
+        .then(([room]) => repo.bid({
+            id: room.id,
+            value: 100
+        }))
+        .then(([room]) => repo.bid({
+            id: room.id,
+            value: 100
+        }))
+        .then(([room]) => repo.bid({
+            id: room.id,
+            value: 150
+        }))
+        .then(([room]) => repo.bid({
+            id: room.id,
+            value: 155
+        }))
+        .then(([room]) => {
+            t.equal(room.highestBid.value, 150, '150 should be the highest bid');
+        })
+        .catch((err) => t.fail(err));
+});
+
+test('Repository.bid', (t) => {
+    beforeEach();
+    t.plan(1);
+    repo.create({ minimum_bid: 100 })
+        .then(([room]) => repo.bid({
+            id: room.id,
+            value: 100
+        }))
+        .then(([room]) => repo.bid({
+            id: room.id,
+            value: 100
+        }))
+        .then(([room]) => repo.bid({
+            id: room.id,
+            value: 100
+        }))
+        .then(([room]) => {
+            t.deepEqual(room.highestBid, room.bids[0], 'the first bid should be the highest');
         })
         .catch((err) => t.fail(err));
 });
