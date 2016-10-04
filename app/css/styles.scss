@@ -1,1 +1,4 @@
-@import 'uikit.almost-flat.min';
+$icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
+@import "~bootstrap-sass/assets/stylesheets/_bootstrap";
+$img-src: "~bootflat/bootflat/img/check_flat/default.png";
+@import '~bootflat/bootflat/scss/bootflat';

@@ -1,17 +1,12 @@
 import React from 'react';
+import Navbar from './Navbar.jsx';
 
-export class AppLayout extends React.Component {
+export const AppLayout = (props) => {
 
-    render() {
-        return (
-            <div>
-                {this.props.children}
-            </div>
-        );
-    }
-
-}
-
-AppLayout.propTypes = {
-    children: React.PropTypes.node
+    return (
+        <div className="container-fluid">
+            <Navbar/>
+            {props.children}
+        </div>
+    );
 };
