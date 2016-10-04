@@ -19,14 +19,6 @@ before();
 test('Repository.create', (t) => {
     beforeEach();
     t.plan(1);
-    repo.create({ start: Date.now() - 10000 })
-    .then(() => t.fail())
-    .catch((err) => t.true(err instanceof HTTPError, 'should fail because auction was created in the past'));
-});
-
-test('Repository.create', (t) => {
-    beforeEach();
-    t.plan(1);
     repo.create({ end: Date.now() - 10000 })
         .then(() => t.fail())
         .catch((err) => t.true(err instanceof HTTPError, 'should fail because auction end date is before start date'));
@@ -35,12 +27,11 @@ test('Repository.create', (t) => {
 test('Repository.create', (t) => {
     beforeEach();
     t.plan(2);
-    const duration = nconf.get('AUCTION_DURATION_IN_MINUTES'),
-        now = Date.now(),
-        end = now + (duration * 1000*60);
+    const duration = nconf.get('AUCTION_DURATION_IN_MINUTES');
 
-    repo.create({ start: now })
+    repo.create({})
         .then(([room]) => {
+            const end = room.start + (duration * 1000*60);
             t.true(room, 'should create room');
             t.equal(room.end, end, 'end date should be correct');
         })
@@ -52,7 +43,7 @@ test('Repository.getAll', (t) => {
     t.plan(1);
     repo.getAll()
         .then((rooms) => {
-            t.equal(rooms.length, 5, 'should return all rooms');
+            t.equal(rooms.length, seed.length, 'should return all rooms');
         })
         .catch((err) => t.fail(err));
 });

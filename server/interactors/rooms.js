@@ -1,5 +1,4 @@
-import _ from 'lodash';
-import HTTPError from '~/lib/errors';
+import Promise from 'bluebird';
 
 export default class Interactor {
 
@@ -8,27 +7,41 @@ export default class Interactor {
         this._presenter = presenter;
     }
 
-    getActiveAuctions() {
-        this.repository.getAll()
-            .then((rooms) => this.presenter.present(rooms))
-            .then((filtered) => filtered.filter((room) => room.active));
-            //@todo sort by remaining bidding time
+    create(rooms) {
+        const promises = rooms.map((room) => this.repository.create(room));
+        return Promise.all(promises)
+            .then((rooms) => this.presenter.present(rooms));
     }
 
-    getPastAuctions() {
-        this.repository.getAll()
+    getOne({ id }) {
+        return this.repository.getById(id)
             .then((rooms) => this.presenter.present(rooms))
-            .then((filtered) => filtered.filter((room) => !room.active));
+            .then(([head]) => head);
+    }
+
+    getAll() {
+        return this.repository.getAll()
+            .then((rooms) => this.presenter.present(rooms));
+    }
+
+    getActive() {
+        return this.repository.getAll()
+            .then((rooms) => this.presenter.presentActive(rooms));
+    }
+
+    getEnded() {
+        return this.repository.getAll()
+            .then((rooms) => this.presenter.presentEnded(rooms));
     }
 
     isBidIDWinner({ bid_id }) {
-        this.repository.getAll()
+        return this.repository.getAll()
             .then((rooms) => this.presenter.present(rooms))
             .then((filtered) => filtered.filter((room) => {
                 const isWinner = room.highestBid ? room.highestBid.bid_id.toUpperCase() === bid_id.toUpperCase() : false;
                 return !room.active && isWinner;
             }))
-            .then((winners) => _.first(winners));
+            .then(([head]) => head);
     }
 
     get repository() {

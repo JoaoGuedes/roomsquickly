@@ -33,6 +33,11 @@ const _computeHighestBid = ({ room, bid }) => {
     }
 };
 
+const _isRoomActive = ({ room }) => {
+    const now = Date.now();
+    return now >= room.start && now < room.end;
+};
+
 export default class Repository {
 
     /**
@@ -63,7 +68,6 @@ export default class Repository {
     create({
         name        = DEFAULT_ROOM_NAME,
         image       = DEFAULT_ROOM_IMAGE,
-        active      = true,
         start,
         end,
         location    = DEFAULT_LOCATION,
@@ -78,16 +82,16 @@ export default class Repository {
                 finishTime = start + (duration * MINUTE);
             end = end || finishTime;  //Set duration of auction
 
-            if (start < NOW) {
+            /*if (start < NOW) {
                 return reject(new HTTPError('Auction date cannot be in the past').BadRequest());
-            }
+            }*/
 
             if (end < start) {
                 return reject(new HTTPError('Auction end date cannot be before start date').BadRequest());
             }
 
-            const newRoom = { id: uuid.v4(), name, image, start, end, location, minimum_bid, bids, active };
-
+            const newRoom = { id: uuid.v4(), name, image, start, end, location, minimum_bid, bids };
+            newRoom.active = _isRoomActive({ room: newRoom });
             this._rooms.push(newRoom);
             resolve([newRoom]);
         });
@@ -95,7 +99,12 @@ export default class Repository {
     }
 
     getAll() {
-        return new Promise((resolve) => resolve(this._rooms));
+        return new Promise((resolve) => {
+            this._rooms.forEach((room) => {
+                room.active = _isRoomActive({ room });
+            });
+            resolve(this._rooms);
+        });
     }
 
     getById(id) {
@@ -109,6 +118,7 @@ export default class Repository {
                 .filter((room) => room.id === id)
                 .value();
 
+            room.active = _isRoomActive({ room });
             return resolve(room);
         });
     }
@@ -137,7 +147,7 @@ export default class Repository {
                     throw new HTTPError('Missing bid value').BadRequest();
                 }
                 if (!room.active) {
-                    throw new HTTPError('Auction as already ended').BadRequest();
+                    throw new HTTPError('Auction has already ended').BadRequest();
                 }
                 return room;
             })

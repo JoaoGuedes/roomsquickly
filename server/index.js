@@ -1,6 +1,5 @@
 import express from 'express';
 import nconf from 'nconf';
-import routes from './api';
 import morgan from 'morgan';
 
 const app = express();
@@ -8,7 +7,7 @@ const app = express();
 nconf.file('./server/config.json');
 
 app.use(morgan('dev'));
-app.use('/api', routes);
+app.use('/api', require('./api').default);
 
 //Start server
 app.listen(3000);
