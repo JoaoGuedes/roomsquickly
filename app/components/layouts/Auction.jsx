@@ -5,7 +5,7 @@ import Jumbo from '../Jumbo.jsx';
 export default class AuctionLayout extends React.Component {
 
     componentDidMount() {
-        const url = 'http://localhost:3000/api/1';
+        const url = '/api/1';
         fetch(`${url}/rooms`)
             .then((data) => {
                 return data.json();

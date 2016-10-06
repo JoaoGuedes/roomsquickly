@@ -2,7 +2,7 @@ var path = require('path');
 
 module.exports = {
     context: __dirname + '/app',
-    entry: ['app.jsx', 'whatwg-fetch'],
+    entry: ['whatwg-fetch', 'app.jsx'],
     output: {
         path: __dirname + '/dist/app',
         filename: 'bundle.js'
@@ -43,7 +43,7 @@ module.exports = {
             },
             {
                 test: /\.scss$/,
-                loaders: ['style', 'css', 'sass']
+                loaders: ['style', 'css', 'resolve-url', 'sass?sourceMap']
             },
             {
                 test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
