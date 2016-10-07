@@ -2,10 +2,35 @@ import React from 'react';
 import { Link } from 'react-router';
 import Jumbo from '../Jumbo.jsx';
 
-export default class AuctionLayout extends React.Component {
+const AuctionLayout = React.createClass({
+
+    propTypes: {
+        children: React.PropTypes.node
+    },
+
+    childContextTypes: {
+        setActiveTab: React.PropTypes.func
+    },
+
+    getInitialState() {
+        return {
+            activeTab: 'all'
+        };
+    },
+
+    setActiveTab(tab) {
+        this.setState({
+            activeTab: tab
+        });
+    },
+
+    getChildContext() {
+        return {
+            setActiveTab: this.setActiveTab
+        };
+    },
 
     render() {
-        const state = this.props.routes[this.props.routes.length-1].path;
         return (
             <div>
                 <Jumbo/>
@@ -13,13 +38,13 @@ export default class AuctionLayout extends React.Component {
                     <div className="row padded">
                         <div className="col-sm-12">
                             <ul className="nav nav-pills">
-                                <li role="presentation" className={ state === 'all' ? 'active' : '' }>
-                                    <Link to="/rooms/all">All</Link>
+                                <li role="presentation" className={ this.state.activeTab === 'all' ? 'active' : '' }>
+                                    <Link to="/rooms">All</Link>
                                 </li>
-                                <li role="presentation" className={ state === 'active' ? 'active' : '' }>
+                                <li role="presentation" className={ this.state.activeTab === 'active' ? 'active' : '' }>
                                     <Link to="/rooms/active">Active</Link>
                                 </li>
-                                <li role="presentation" className={ state === 'ended' ? 'active' : '' }>
+                                <li role="presentation" className={ this.state.activeTab === 'ended' ? 'active' : '' }>
                                     <Link to="/rooms/ended">Ended</Link>
                                 </li>
                             </ul>
@@ -30,8 +55,6 @@ export default class AuctionLayout extends React.Component {
             </div>
         );
     }
-};
+});
 
-AuctionLayout.propTypes = {
-    children: React.PropTypes.node
-};
+export default AuctionLayout;

@@ -1,5 +1,6 @@
 import React from 'react';
 import Navbar from '../Navbar.jsx';
+import Footer from '../Footer.jsx';
 
 export const AppLayout = (props) => {
 
@@ -11,6 +12,7 @@ export const AppLayout = (props) => {
         <div>
             <Navbar/>
             {props.children}
+            <Footer/>
         </div>
     );
 };

@@ -13,8 +13,8 @@ export default class Presenter {
             }
             const current = new Date(room.end - NOW),
                 remaining = {
-                    minutes: current.getMinutes(),
-                    seconds: current.getSeconds()
+                    minutes: `${current.getMinutes() < 10 ? 0 : '' }${current.getMinutes()}`,
+                    seconds: `${current.getSeconds() < 10 ? 0 : '' }${current.getSeconds()}`
                 };
 
             return {

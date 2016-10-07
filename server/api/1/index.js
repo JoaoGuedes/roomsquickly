@@ -13,7 +13,7 @@ const interactor = new RoomsInteractor({
 interactor.create([
     {
         name: 'Lounge',
-        image: 'http://placehold.it/32x32',
+        image: 'http://www.motelcorpoealma.com.br/resources/images/galeria/_DSC3692.jpg',
         location: 'Porto, Portugal',
         minimum_bid: 10,
         start: Date.now(),
@@ -21,7 +21,7 @@ interactor.create([
     },
     {
         name: 'Presidential suite',
-        image: 'http://placehold.it/32x32',
+        image: 'http://www.mountfalcon.com/uploads/images/FullLengthImages/Small/Wall%20Pool%20Bedroom.NK_1.jpg',
         location: 'Lisbon, Portugal',
         minimum_bid: 100,
         start: Date.now() + 1000

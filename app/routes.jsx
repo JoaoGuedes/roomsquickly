@@ -1,8 +1,15 @@
 import React from 'react';
-import { Router, Route, browserHistory, IndexRoute, IndexRedirect } from 'react-router';
+import {
+    Router,
+    Route,
+    browserHistory,
+    IndexRoute,
+    IndexRedirect
+} from 'react-router';
 import { AppLayout } from 'components/layouts/App.jsx';
 import AuctionLayout from 'components/layouts/Auction.jsx';
 import ActiveAuctionsLayout from 'components/layouts/ActiveAuctions.jsx';
+import AllAuctionsLayout from 'components/layouts/AllAuctions.jsx';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
@@ -19,11 +26,11 @@ const Routes = React.createClass({
             <Provider store={store}>
                 <Router history={browserHistory}>
                     <Route path="/" component={AppLayout}>
-                        <IndexRedirect to="/rooms/active"/>
+                        <IndexRedirect to="/rooms"/>
                         <Route path="rooms" component={AuctionLayout}>
-                            {/*<Route path="all" component={AllAuctionsLayout}/>*/}
-                            <Route path="active" component={ActiveAuctionsLayout}/>
-                            {/*}<Route path="ended" component={EndedAuctionsLayout}/>*/}
+                            <IndexRoute component={AllAuctionsLayout} />
+                            <Route path="active" component={ActiveAuctionsLayout} />
+                            {/*<Route path="ended" component={EndedAuctionsLayout}/>*/}
                         </Route>
                     </Route>
                     <Route path="*">

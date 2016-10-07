@@ -1,15 +1,16 @@
 import React from 'react';
 import AuctionItem from '../AuctionItem.jsx';
 
-const ActiveAuctionsLayout = React.createClass({
+const AllAuctionsLayout = React.createClass({
 
     contextTypes: {
         setActiveTab: React.PropTypes.func
     },
 
-    _fetch() {
+    componentDidMount() {
+        this.context.setActiveTab('all');
         const url = '/api/1';
-        fetch(`${url}/rooms/active`)
+        fetch(`${url}/rooms`)
             .then((data) => {
                 return data.json();
             })
@@ -19,25 +20,6 @@ const ActiveAuctionsLayout = React.createClass({
             .catch((err) => console.log(err));
     },
 
-    componentWillMount() {
-        this._fetch();
-    },
-
-    componentDidMount() {
-        this.context.setActiveTab('active');
-        this._interval = setInterval(this._fetch, 5000);
-    },
-
-    componentWillUnmount() {
-        clearInterval(this._interval);
-    },
-
-    getInitialState() {
-        return {
-            collection: []
-        };
-    },
-
     render() {
         return (
             <div>
@@ -45,7 +27,7 @@ const ActiveAuctionsLayout = React.createClass({
                     <div className="row">
                         <div className="col-sm-12">
                             {
-                                this.state.collection.map((item, index) => <AuctionItem key={index} data={item} />)
+                                this.state && this.state.collection ? this.state.collection.map((item, index) => <AuctionItem key={index} data={item}/>) : ''
                             }
                         </div>
                     </div>
@@ -55,4 +37,4 @@ const ActiveAuctionsLayout = React.createClass({
     }
 });
 
-export default ActiveAuctionsLayout;
+export default AllAuctionsLayout;

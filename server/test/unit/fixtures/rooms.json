@@ -1,38 +1,38 @@
 [
     {
         "name": "Foo",
-        "image": "http://placehold.it/32x32",
+        "image": "https://www.skycityauckland.co.nz/media/338920/Premium-Luxury-Suite-tile.jpg",
         "location": "Quinoa, USA",
         "minimum_bid": 60,
         "start": 1475580099689
     },
     {
         "name": "Apextri",
-        "image": "http://placehold.it/32x32",
+        "image": "http://www.parkregiskriskin.ae/wp-content/blogs.dir/2/files/rooms/modern-junior-suite-room.jpg",
         "location": "Kaka, USA",
         "minimum_bid": 49
     },
     {
         "name": "Intradisk",
-        "image": "http://placehold.it/32x32",
+        "image": "https://www.skycityauckland.co.nz/media/52946/Grand-Presidential-Suite-400x200.jpg",
         "location": "Elrama, USA",
         "minimum_bid": 17
     },
     {
         "name": "Zepitope",
-        "image": "http://placehold.it/32x32",
+        "image": "http://www.hotellesbories.com/images_cached/800x400/200-so-2012-suite-horizon-photo-montage-02-fr.jpg?background=white&quality=70&method=fill&format=jpeg",
         "location": "Rosewood, USA",
         "minimum_bid": 26
     },
     {
         "name": "Telepark",
-        "image": "http://placehold.it/32x32",
+        "image": "http://www.banthaiphuket.com/wp-content/uploads/2016/07/superior-suite1.jpg",
         "location": "Wells, USA",
         "minimum_bid": 17
     },
     {
         "name": "Zidox",
-        "image": "http://placehold.it/32x32",
+        "image": "http://furnituredefinitionspictures.com/wp-content/uploads/lago-suite-las-vegas-suites-the-palazzo-las-vegas-venetian-luxury-suite-with-a-king-bed-venetian-luxury-suite-with-a-king-bed.jpg",
         "location": "Celeryville, USA",
         "minimum_bid": 34
     }
