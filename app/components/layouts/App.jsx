@@ -3,11 +3,6 @@ import Navbar from '../Navbar.jsx';
 import Footer from '../Footer.jsx';
 
 export const AppLayout = (props) => {
-
-    AppLayout.propTypes = {
-        children: React.PropTypes.node
-    };
-
     return (
         <div>
             <Navbar/>
@@ -15,4 +10,8 @@ export const AppLayout = (props) => {
             <Footer/>
         </div>
     );
+};
+
+AppLayout.propTypes = {
+    children: React.PropTypes.node
 };

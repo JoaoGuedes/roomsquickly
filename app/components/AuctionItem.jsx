@@ -1,56 +1,74 @@
 import React from 'react';
+import { Link } from 'react-router';
 
-const AuctionItem = React.createClass({
+const formatDate = (date) => {
+    return `${date.toLocaleTimeString()} on ${date.getDate()}/${date.getMonth()}/${date.getFullYear()}`;
+};
 
-    _update() {
-        return setInterval(() => {
-            const now = new Date(this.props.data.end - Date.now());
-            this.setState({
-                minutes: `${now.getMinutes() < 10 ? 0 : ''}${now.getMinutes()}`,
-                seconds: `${now.getSeconds() < 10 ? 0 : ''}${now.getSeconds()}`
-            });
-        }, 500);
-    },
+const AuctionItem = (props) => {
 
-    componentDidMount() {
-        if (this.props.data.active) {
-            this._interval = this._update();
-        }
-    },
+    if (props.data.active) {
 
-    componentWillUnmount() {
-        clearInterval(this._interval);
-    },
+        let {
+            data: {
+                id, image, name, location,
+                remaining: { minutes, seconds }
+            }
+        } = props;
 
-    getInitialState() {
-        return {
-            minutes: this.props.data.remaining.minutes || 0,
-            seconds: this.props.data.remaining.seconds || 0
-        };
-    },
-
-    componentWillReceiveProps(nextProps) {
-        this.setState({
-            minutes: nextProps.data.remaining.minutes,
-            seconds: nextProps.data.remaining.seconds
-        });
-    },
-
-    render() {
         return (
             <div className="col-md-4">
                 <div className="thumbnail">
-                    <img className="img-rounded" src={this.props.data.image} />
+                    <img className="img-rounded" src={image} />
                     <div className="caption text-center">
-                        <h3>{this.props.data.name}</h3>
-                        <p>{this.props.data.location}</p>
-                        <p>{ `${this.state.minutes}:${this.state.seconds}`}</p>
-                        <p><a href="#" className="btn btn-warning" role="button">Button</a> <a href="#" className="btn btn-default" role="button">Button</a></p>
+                        <h1><Link to={`/room/${id}`}>{name}</Link></h1>
+                        <span className="glyphicon glyphicon-map-marker"></span>
+                        <span> {props.data.location}</span>
+                        <h2>{`${minutes}:${seconds}`}</h2>
+                        <p>
+                        </p>
                     </div>
                 </div>
             </div>
         );
     }
-});
+
+    let {
+        data: {
+            image, name, location, end, winning_bid
+        }
+    } = props;
+
+    return (
+        <div className="col-md-4">
+            <div className="thumbnail">
+                <img className="img-rounded" src={props.data.image} />
+                <div className="caption text-center">
+                    <h1><Link to={`/room/${id}`}>{name}</Link></h1>
+                    <span className="glyphicon glyphicon-map-marker"></span>
+                    <span> {props.data.location}</span>
+                    <p>{props.data.winning_bid ? props.data.winning_bid.value : 'No winners' }</p>
+                    <p>Ended at {formatDate(new Date(end))}</p>
+                    <p><a href="#" className="btn btn-warning" role="button">Button</a> <a href="#" className="btn btn-default" role="button">Button</a></p>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+AuctionItem.propTypes = {
+    data: React.PropTypes.shape({
+        id          : React.PropTypes.string,
+        active      : React.PropTypes.bool,
+        image       : React.PropTypes.string,
+        name        : React.PropTypes.string,
+        location    : React.PropTypes.string,
+        remaining   : React.PropTypes.shape({
+            minutes : React.PropTypes.string,
+            seconds : React.PropTypes.string
+        }),
+        winning_bid : React.PropTypes.obj
+    })
+};
 
 export default AuctionItem;

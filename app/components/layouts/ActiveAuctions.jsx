@@ -26,10 +26,19 @@ const ActiveAuctionsLayout = React.createClass({
     componentDidMount() {
         this.context.setActiveTab('active');
         this._interval = setInterval(this._fetch, 5000);
+        this._update = setInterval(() => this.setState({
+            collection: this.state.collection.map((item) => {
+                const now = new Date(item.end - Date.now());
+                item.remaining.seconds = `${now.getSeconds() < 10 ? 0 : ''}${now.getSeconds()}`;
+                item.remaining.minutes = `${now.getMinutes() < 10 ? 0 : ''}${now.getMinutes()}`;
+                return item;
+            })
+
+        }), 500);
     },
 
     componentWillUnmount() {
-        clearInterval(this._interval);
+        [this._interval, this._update].forEach((interval) => clearInterval(interval));
     },
 
     getInitialState() {

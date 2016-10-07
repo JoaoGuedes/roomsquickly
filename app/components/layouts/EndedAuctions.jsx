@@ -1,16 +1,16 @@
 import React from 'react';
 import AuctionItem from '../AuctionItem.jsx';
 
-const AllAuctionsLayout = React.createClass({
+const EndedAuctionsLayout = React.createClass({
 
     contextTypes: {
         setActiveTab: React.PropTypes.func
     },
 
     componentDidMount() {
-        this.context.setActiveTab('all');
+        this.context.setActiveTab('ended');
         const url = '/api/1';
-        fetch(`${url}/rooms`)
+        fetch(`${url}/rooms/ended`)
             .then((data) => {
                 return data.json();
             })
@@ -37,4 +37,4 @@ const AllAuctionsLayout = React.createClass({
     }
 });
 
-export default AllAuctionsLayout;
+export default EndedAuctionsLayout;

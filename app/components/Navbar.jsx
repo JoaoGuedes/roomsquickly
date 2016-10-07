@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 
 const Navbar = (props) => {
     return (
-        <nav className="navbar navbar-default" role="navigation">
+        <nav className="navbar navbar-inverse" role="navigation">
             <div className="container-fluid">
                 <div className="navbar-header">
                     <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
@@ -18,7 +18,7 @@ const Navbar = (props) => {
                     <form className="navbar-form navbar-right" role="search">
                         <div className="form-search search-only">
                             <i className="search-icon glyphicon glyphicon-search"></i>
-                            <input type="text" className="form-control search-query"/>
+                            <input type="text" placeholder="Search bid ID" className="form-control search-query"/>
                         </div>
                     </form>
                 </div>

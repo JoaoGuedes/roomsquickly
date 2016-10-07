@@ -14,7 +14,7 @@ const AuctionLayout = React.createClass({
 
     getInitialState() {
         return {
-            activeTab: 'all'
+            activeTab: 'active'
         };
     },
 
@@ -38,9 +38,6 @@ const AuctionLayout = React.createClass({
                     <div className="row padded">
                         <div className="col-sm-12">
                             <ul className="nav nav-pills">
-                                <li role="presentation" className={ this.state.activeTab === 'all' ? 'active' : '' }>
-                                    <Link to="/rooms">All</Link>
-                                </li>
                                 <li role="presentation" className={ this.state.activeTab === 'active' ? 'active' : '' }>
                                     <Link to="/rooms/active">Active</Link>
                                 </li>
