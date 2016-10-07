@@ -1,6 +1,7 @@
 import express from 'express';
 import nconf from 'nconf';
 import morgan from 'morgan';
+import { errors } from '~/lib/middleware';
 
 const app = express();
 
@@ -13,6 +14,7 @@ app.use((req, res, next) => {
     next();
 });
 app.use('/api', require('./api').default);
+app.use(errors);
 
 //Start server
 app.listen(3000);

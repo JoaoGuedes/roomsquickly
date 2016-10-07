@@ -116,10 +116,15 @@ export default class Repository {
 
             const room = _.chain(this._rooms)
                 .filter((room) => room.id === id)
+                .first()
                 .value();
 
+            if (!room) {
+                return reject(new HTTPError('Room not found').NotFound());
+            }
+
             room.active = _isRoomActive({ room });
-            return resolve(room);
+            return resolve([room]);
         });
     }
 

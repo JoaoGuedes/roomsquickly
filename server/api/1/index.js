@@ -17,7 +17,7 @@ interactor.create([
         location: 'Porto, Portugal',
         minimum_bid: 10,
         start: Date.now(),
-        end: Date.now() + 1000*60*5
+        end: Date.now() + 1000*60*0.5
     },
     {
         name: 'Presidential suite',
@@ -47,6 +47,6 @@ export default Router({ mergeParams: true })
     .get('/room/:id', (req, res, next) => {
         const id = req.params.id;
         interactor.getOne({ id })
-            .then((room) => room ? res.status(200).json(room) : res.status(404).send({}))
+            .then((room) => res.status(200).json(room))
             .catch((err) => next(err));
     });

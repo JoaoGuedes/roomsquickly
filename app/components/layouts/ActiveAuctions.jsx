@@ -20,16 +20,14 @@ const ActiveAuctionsLayout = React.createClass({
             .catch((err) => console.log(err));
     },
 
-    componentWillMount() {
-        this._fetch();
-    },
 
     componentDidMount() {
         this.context.setActiveTab('active');
-        this._interval = setInterval(this._fetch, 5000);
-        this._update = setInterval(() => this.setState({
+        this._fetch();
+        this._syncAuctionLoop = setInterval(this._fetch, 5000);
+        this._updateTimeLoop = setInterval(() => this.setState({
             collection: this.state.collection.map((item) => {
-                const now = new Date(item.end - Date.now());
+                const now = new Date(Date.now() > item.end ? 0 : item.end - Date.now());
                 item.remaining.seconds = `${now.getSeconds() < 10 ? 0 : ''}${now.getSeconds()}`;
                 item.remaining.minutes = `${now.getMinutes() < 10 ? 0 : ''}${now.getMinutes()}`;
                 return item;
@@ -39,7 +37,7 @@ const ActiveAuctionsLayout = React.createClass({
     },
 
     componentWillUnmount() {
-        [this._interval, this._update].forEach((interval) => clearInterval(interval));
+        [this._syncAuctionLoop, this._updateTimeLoop].forEach((interval) => clearInterval(interval));
     },
 
     getInitialState() {
