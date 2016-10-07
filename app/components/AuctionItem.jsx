@@ -11,7 +11,7 @@ const AuctionItem = (props) => {
 
         let {
             data: {
-                id, image, name, location,
+                id, image, name, location, bids,
                 remaining: { minutes, seconds }
             }
         } = props;
@@ -23,10 +23,9 @@ const AuctionItem = (props) => {
                     <div className="caption text-center">
                         <h1><Link to={`/room/${id}`}>{name}</Link></h1>
                         <span className="glyphicon glyphicon-map-marker"></span>
-                        <span> {props.data.location}</span>
+                        <small> {props.data.location}</small>
                         <h2>{`${minutes}:${seconds}`}</h2>
-                        <p>
-                        </p>
+                        <p>{ bids.length } bids</p>
                     </div>
                 </div>
             </div>
@@ -59,6 +58,7 @@ const AuctionItem = (props) => {
 AuctionItem.propTypes = {
     data: React.PropTypes.shape({
         id          : React.PropTypes.string,
+        bids        : React.PropTypes.array,
         active      : React.PropTypes.bool,
         image       : React.PropTypes.string,
         name        : React.PropTypes.string,
