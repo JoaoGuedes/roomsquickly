@@ -1,37 +1,37 @@
 [
     {
-        "name": "Foo",
+        "name": "The Great Suite",
         "image": "https://www.skycityauckland.co.nz/media/338920/Premium-Luxury-Suite-tile.jpg",
-        "location": "Quinoa, USA",
+        "location": "Cambridge, UK",
         "minimum_bid": 60,
         "start": 1475580099689
     },
     {
-        "name": "Apextri",
+        "name": "Le Grand Suite",
         "image": "http://www.parkregiskriskin.ae/wp-content/blogs.dir/2/files/rooms/modern-junior-suite-room.jpg",
-        "location": "Kaka, USA",
+        "location": "Paris, FR",
         "minimum_bid": 49
     },
     {
-        "name": "Intradisk",
+        "name": "Biggest Room Ever",
         "image": "https://www.skycityauckland.co.nz/media/52946/Grand-Presidential-Suite-400x200.jpg",
-        "location": "Elrama, USA",
+        "location": "New York, USA",
         "minimum_bid": 17
     },
     {
-        "name": "Zepitope",
+        "name": "Master's Lounge",
         "image": "http://www.hotellesbories.com/images_cached/800x400/200-so-2012-suite-horizon-photo-montage-02-fr.jpg?background=white&quality=70&method=fill&format=jpeg",
-        "location": "Rosewood, USA",
+        "location": "Venice, IT",
         "minimum_bid": 26
     },
     {
-        "name": "Telepark",
+        "name": "O Grande Quarto",
         "image": "http://www.banthaiphuket.com/wp-content/uploads/2016/07/superior-suite1.jpg",
-        "location": "Wells, USA",
+        "location": "Lisbon, PT",
         "minimum_bid": 17
     },
     {
-        "name": "Zidox",
+        "name": "The King's Chamber",
         "image": "http://furnituredefinitionspictures.com/wp-content/uploads/lago-suite-las-vegas-suites-the-palazzo-las-vegas-venetian-luxury-suite-with-a-king-bed-venetian-luxury-suite-with-a-king-bed.jpg",
         "location": "Celeryville, USA",
         "minimum_bid": 34

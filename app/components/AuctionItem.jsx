@@ -87,7 +87,7 @@ const AuctionItem = (props) => {
 };
 
 AuctionItem.propTypes = {
-    data: React.PropTypes.obj
+    data: React.PropTypes.object
 };
 
 export default AuctionItem;
