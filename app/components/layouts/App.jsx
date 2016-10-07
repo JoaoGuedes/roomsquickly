@@ -1,11 +1,11 @@
 import React from 'react';
-import Navbar from '../Navbar.jsx';
+import Navigation from '../Navigation.jsx';
 import Footer from '../Footer.jsx';
 
 export const AppLayout = (props) => {
     return (
         <div>
-            <Navbar/>
+            <Navigation/>
             {props.children}
             <Footer/>
         </div>

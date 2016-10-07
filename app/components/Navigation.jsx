@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-const Navbar = (props) => {
+const Navigation = (props) => {
     return (
         <nav className="navbar navbar-inverse" role="navigation">
             <div className="container-fluid">
@@ -27,4 +27,4 @@ const Navbar = (props) => {
     );
 };
 
-export default Navbar;
+export default Navigation;

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import Jumbo from '../Jumbo.jsx';
 
-const AuctionLayout = React.createClass({
+const AuctionListLayout = React.createClass({
 
     propTypes: {
         children: React.PropTypes.node
@@ -33,6 +33,9 @@ const AuctionLayout = React.createClass({
     render() {
         return (
             <div>
+                <ol className="breadcrumb">
+                    <li className="active"><Link to="/rooms">List</Link></li>
+                </ol>
                 <Jumbo/>
                 <div className="container">
                     <div className="row padded">
@@ -54,4 +57,4 @@ const AuctionLayout = React.createClass({
     }
 });
 
-export default AuctionLayout;
+export default AuctionListLayout;

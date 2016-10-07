@@ -9,15 +9,12 @@
     width: 100%;
 }
 
-.navbar {
+.navbar, .breadcrumb {
     border-radius: 0px;
     margin-bottom: 0px;
 }
 
-.input-xs {
-  height: 22px;
-  padding: 2px 5px;
-  font-size: 12px;
-  line-height: 1.5; /* If Placeholder of the input is moved up, rem/modify this. */
-  border-radius: 3px;
+.location-winner-box {
+    text-align: left;
+    display: inline-block;
 }

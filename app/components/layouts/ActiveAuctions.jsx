@@ -1,5 +1,6 @@
 import React from 'react';
 import AuctionItem from '../AuctionItem.jsx';
+import EmptyList from '../EmptyList.jsx';
 
 const ActiveAuctionsLayout = React.createClass({
 
@@ -54,7 +55,9 @@ const ActiveAuctionsLayout = React.createClass({
                     <div className="row">
                         <div className="col-sm-12">
                             {
-                                this.state.collection.map((item, index) => <AuctionItem key={index} data={item} />)
+                                this.state.collection.length > 0 ?
+                                    this.state.collection.map((item, index) => <AuctionItem key={index} data={item} />) :
+                                    <EmptyList/>
                             }
                         </div>
                     </div>
