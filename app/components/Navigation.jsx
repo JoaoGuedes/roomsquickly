@@ -4,7 +4,6 @@ import { Link } from 'react-router';
 const Navigation = (props) => {
     return (
         <nav className="navbar navbar-inverse" role="navigation">
-            <div className="container-fluid">
                 <div className="navbar-header">
                     <button type="button" className="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
                         <span className="sr-only">Toggle navigation</span>
@@ -22,7 +21,6 @@ const Navigation = (props) => {
                         </div>
                     </form>
                 </div>
-            </div>
         </nav>
     );
 };

@@ -51,6 +51,7 @@
   },
   "dependencies": {
     "bluebird": "^3.4.1",
+    "body-parser": "^1.15.2",
     "bootflat": "^2.0.4",
     "classnames": "^2.2.5",
     "es6-error": "^3.1.0",

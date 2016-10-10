@@ -13,7 +13,7 @@ const interactor = new RoomsInteractor({
 interactor.create([
     {
         name: 'Lounge',
-        image: 'http://www.motelcorpoealma.com.br/resources/images/galeria/_DSC3692.jpg',
+        image: 'https://a2.muscache.com/im/pictures/7f9e0bc8-f374-46f8-a7b0-8c99342bd19b.jpg?aki_policy=xx_large',
         location: 'Porto, Portugal',
         minimum_bid: 10,
         start: Date.now(),
@@ -21,7 +21,7 @@ interactor.create([
     },
     {
         name: 'Presidential suite',
-        image: 'http://www.mountfalcon.com/uploads/images/FullLengthImages/Small/Wall%20Pool%20Bedroom.NK_1.jpg',
+        image: 'https://a0.muscache.com/im/pictures/23832986/868a53b8_original.jpg?aki_policy=xx_large',
         location: 'Lisbon, Portugal',
         minimum_bid: 100,
         start: Date.now() + 1000
@@ -42,6 +42,14 @@ export default Router({ mergeParams: true })
     .get('/rooms/ended', (req, res, next) => {
         interactor.getEnded()
             .then((rooms) => res.status(200).json(rooms))
+            .catch((err) => next(err));
+    })
+    .post('/room/:id/bid', (req, res, next) => {
+        const id = req.params.id,
+            value = req.body.value;
+
+        interactor.bid({ id, value })
+            .then((bid) => res.status(200).json(bid))
             .catch((err) => next(err));
     })
     .get('/room/:id', (req, res, next) => {

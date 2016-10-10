@@ -167,7 +167,7 @@ export default class Repository {
 
                 _computeHighestBid({ room, bid });
                 room.bids.push(bid);
-                return [room];
+                return [bid];
             });
     }
 

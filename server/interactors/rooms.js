@@ -34,6 +34,10 @@ export default class Interactor {
             .then((rooms) => this.presenter.presentEnded(rooms));
     }
 
+    bid({ id, value }) {
+        return this.repository.bid({ id, value });
+    }
+
     isBidIDWinner({ bid_id }) {
         return this.repository.getAll()
             .then((rooms) => this.presenter.present(rooms))

@@ -4,7 +4,7 @@ import Footer from '../Footer.jsx';
 
 export const AppLayout = (props) => {
     return (
-        <div>
+        <div className="container-custom">
             <Navigation/>
             {props.children}
             <Footer/>

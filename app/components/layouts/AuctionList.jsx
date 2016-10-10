@@ -37,7 +37,7 @@ const AuctionListLayout = React.createClass({
                     <li className="active"><Link to="/rooms">List</Link></li>
                 </ol>
                 <Jumbo/>
-                <div className="container">
+                <div className="container container-auction">
                     <div className="row padded">
                         <div className="col-sm-12">
                             <ul className="nav nav-pills">

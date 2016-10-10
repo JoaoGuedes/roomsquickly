@@ -1,6 +1,19 @@
 @import '~bootflat/css/bootstrap.min';
 @import '~bootflat/bootflat/scss/bootflat';
 
+.container-custom {
+    @extend .container-fluid;
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+@media (min-width: 992px) {
+    .container-auction {
+        min-height: 833px
+    }
+}
+
+
 .padded {
     padding-bottom: 30px;
 }
