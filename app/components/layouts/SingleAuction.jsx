@@ -10,7 +10,7 @@ const BidForm = (props) => {
             <h3>{`${ props.data.remaining.minutes }:${ props.data.remaining.seconds }`}</h3>
             <form className="form-inline" onSubmit={(event) => props.onBid(event, _bid.value)}>
               <div className="form-group">
-                <input type="text" ref={(input) => _bid = input} className="form-control" placeholder={props.data.minimum_bid} />
+                <input type="number" ref={(input) => _bid = input} className="form-control" placeholder={props.data.minimum_bid} />
               </div>
               <button type="submit" className="btn btn-success" style={{ marginLeft: '10px' }}>Bid</button>
             </form>
@@ -65,6 +65,37 @@ const BidList = (props) => {
 BidList.propTypes = {
     data: React.PropTypes.array,
     winner: React.PropTypes.object
+};
+
+const Errors = (props) => {
+    let { data } = props;
+    let result = Object.keys(data).map((error, index) => {
+        if (data[error]) {
+            return <div className="alert alert-danger" key={index}>
+                { data[error] }
+            </div>;
+        }
+    });
+    return (<div>{result}</div>);
+};
+
+Errors.propTypes = {
+    data: React.PropTypes.object.isRequired
+};
+
+const Successes = (props) => {
+    let { data } = props;
+    let result = Object.keys(data).map((success, index) => {
+        if (data[success]) {
+            return <div className="alert alert-success" key={index}
+            dangerouslySetInnerHTML={{ __html: data[success] }}/>;
+        }
+    });
+    return (<div>{result}</div>);
+};
+
+Successes.propTypes = {
+    data: React.PropTypes.object.isRequired
 };
 
 const SingleAuctionLayout = React.createClass({
@@ -147,15 +178,36 @@ const SingleAuctionLayout = React.createClass({
         })
             .then((data) => {
                 if (!data.ok) {
-                    return { error: 'Invalid bid' };
+                    return {
+                        ...this.state,
+                        errors: {
+                            ...this.state.errors,
+                            bid: 'Invalid bid'
+                        },
+                        successes: {
+                            ...this.state.successes,
+                            bid: undefined
+                        }
+                    };
                 }
-                return data.json();
+                return data.json()
+                        .then((bid) => {
+                            return {
+                                ...this.state,
+                                successes: {
+                                    ...this.state.successes,
+                                    bid: `Bid id <strong>${bid.bid_id}</strong> with value <strong>${bid.value}฿</strong> has been placed`
+                                },
+                                errors: {
+                                    ...this.state.errors,
+                                    bid: undefined
+                                }
+                            };
+                        });
+
             })
             .then((data) => {
-                this.setState({
-                    ...this.state,
-                    ...data
-                });
+                this.setState({ ...data });
             })
             .catch((err) => console.log(err));
     },
@@ -189,16 +241,17 @@ const SingleAuctionLayout = React.createClass({
                         </div>
                     </div>
 
-                    {/* BID LIST */}
-                    { bids.length > 0 ? <BidList data={this.state.bids} winner={this.state.highestBid}/> : '' }
-
-                    {/* ERRORS */}
-                    { this.state.error ? <div className="alert alert-danger">
-                      <strong>{ this.state.error }</strong>
-                    </div> : '' }
-
                     {/* BID FORM */}
                     { this.state.active ? <BidForm data={this.state} onBid={this.onBid}/> : '' }
+
+                    {/* SUCCESS MESSAGES */}
+                    { this.state.successes ? <Successes data={this.state.successes}/> : '' }
+
+                    {/* ERRORS */}
+                    { this.state.errors ? <Errors data={this.state.errors}/> : '' }
+
+                    {/* BID LIST */}
+                    { bids.length > 0 ? <BidList data={this.state.bids} winner={this.state.highestBid}/> : '' }
 
                 </div>
             </div>

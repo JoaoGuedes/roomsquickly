@@ -17,8 +17,10 @@ export default class Presenter {
                     seconds: `${current.getSeconds() < 10 ? 0 : '' }${current.getSeconds()}`
                 };
 
+            const bids = _.cloneDeep(room.bids).reverse();
             return {
                 ...room,
+                bids,
                 remaining
             };
         });

@@ -35,7 +35,8 @@ export default class Interactor {
     }
 
     bid({ id, value }) {
-        return this.repository.bid({ id, value });
+        return this.repository.bid({ id, value })
+                .then(([head]) => head);
     }
 
     isBidIDWinner({ bid_id }) {
