@@ -2,13 +2,29 @@ import React from 'react';
 import { Link } from 'react-router';
 import Jumbo from '../Jumbo.jsx';
 import Empty from '../EmptyList.jsx';
+import ErrorLayout from './ErrorLayout.jsx';
+
+/**
+ * Useful functions
+ */
+
+const _fetch = (url) => {
+    return fetch(url)
+        .then((data) => {
+            if (data.status >= 400) {
+                return { error: data.statusText };
+            }
+            return data.json();
+        })
+        .catch((error) => ({ error }));
+};
 
 /**
  * Layout components
  */
 const Header = (props) => {
 
-    let { data: { name, location, minimum_bid } } = props;
+    let { data: { name , location, minimum_bid } } = props;
     return (
         <div className="row">
             <div className="col-sm-12">
@@ -32,39 +48,48 @@ const BidList = (props) => {
 
     let { data, winner } = props;
 
-    return (
-    <div className="row" style={{ marginTop: '30px' }}>
-        <div className="col-sm-12">
-            <div className="col-sm-4 col-center">
-                <div className="panel panel-info">
-                    <div className="panel-heading">Bids</div>
-                    <table className="table">
-                        <tbody>
-                            { data
-                                .map((bid, index) => {
-                                    if (bid.bid_id === winner.bid_id) {
-                                        return (
-                                            <tr key={index} className="text-center active">
-                                                <td>
-                                                    <span className="glyphicon glyphicon-star sunflower-dark"></span>
-                                                     &nbsp; { parseFloat(bid.value).toFixed(3) } ฿
-                                                </td>
-                                            </tr>);
+    if (data.length > 0) {
+        return (
+            <div className="row" style={{ marginTop: '30px' }}>
+                <div className="col-sm-12">
+                    <div className="col-sm-4 col-center">
+                        <div className="panel panel-info">
+                            <div className="panel-heading">Bids</div>
+                            <table className="table">
+                                <tbody>
+                                    { data
+                                        .map((bid, index) => {
+                                            if (bid.bid_id === winner.bid_id) {
+                                                return (
+                                                    <tr key={index} className="text-center active">
+                                                        <td>
+                                                            <span className="glyphicon glyphicon-star sunflower-dark"></span>
+                                                             &nbsp; { parseFloat(bid.value).toFixed(3) } ฿
+                                                        </td>
+                                                    </tr>);
+                                            }
+                                            else {
+                                                return (
+                                                    <tr key={index} className="text-center">
+                                                        <td>{ parseFloat(bid.value).toFixed(3) } ฿</td>
+                                                    </tr>);
+                                            }
+                                        })
                                     }
-                                    else {
-                                        return (
-                                            <tr key={index} className="text-center">
-                                                <td>{ parseFloat(bid.value).toFixed(3) } ฿</td>
-                                            </tr>);
-                                    }
-                                })
-                            }
-                        </tbody>
-                    </table>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>);
+        );
+    } else {
+        return (
+            <div className="alert alert-info">
+              <strong>No winners!</strong>
+            </div>
+        );
+    }
 };
 
 BidList.propTypes = {
@@ -81,7 +106,12 @@ const BidForm = (props) => {
         _bid.value = undefined;
     };
 
-    let { data: { remaining: { minutes, seconds }, minimum_bid } } = props;
+    let {
+        data: {
+            remaining: { minutes, seconds },
+            minimum_bid
+        }
+    } = props;
     return (
         <div className="row" style={{ marginBottom: '30px' }}>
             <h3>{`${ minutes }:${ seconds }`}</h3>
@@ -114,21 +144,19 @@ Message.propTypes = {
  * Layouts
  */
 
-const SingleAuctionLayout = React.createClass({
+const ActiveSingleAuction = React.createClass({
 
-    getInitialState() {
-        return {};
+    componentDidMount() {
+        this._installIntervals();
     },
 
-    propTypes: {
-        params: React.PropTypes.shape({
-            id: React.PropTypes.string.isRequired
-        })
+    componentWillUnmount() {
+        this._clearIntervals();
     },
 
     _fetch() {
         const url = '/api/1';
-        return fetch(`${url}/room/${this.props.params.id}`)
+        return fetch(`${url}/room/${this.state.data.id}`)
             .then((data) => {
                 if (data.status === 404) {
                     return { error: 404 };
@@ -141,48 +169,32 @@ const SingleAuctionLayout = React.createClass({
                 if (!state.active) {
                     this._clearIntervals();
                 }
-
-                return state;
             })
             .catch((err) => console.log(err));
     },
 
-    componentDidMount() {
-        this._fetch()
-            .then((state) => {
-                if (state.active) {
-                    this._syncAuctionLoop = setInterval(this._fetch, 5000);
-                    this._updateTimeLoop = setInterval(() => {
-                        const now = new Date(Date.now() > this.state.end ? 0 : this.state.end - Date.now());
-                        const data = {
-                            remaining: {
-                                minutes: `${now.getMinutes() < 10 ? 0 : ''}${now.getMinutes()}`,
-                                seconds: `${now.getSeconds() < 10 ? 0 : ''}${now.getSeconds()}`
-                            }
-                        };
-                        this.setState(data);
-                    }, 500);
+    _installIntervals() {
+        this._syncAuctionLoop = setInterval(this._fetch, 5000);
+        this._updateTimeLoop = setInterval(() => {
+            const now = new Date(Date.now() > this.state.end ? 0 : this.state.end - Date.now());
+            const data = {
+                ...this.state,
+                remaining: {
+                    minutes: `${now.getMinutes() < 10 ? 0 : ''}${now.getMinutes()}`,
+                    seconds: `${now.getSeconds() < 10 ? 0 : ''}${now.getSeconds()}`
                 }
-            });
+            };
+            this.setState(data);
+        }, 500);
     },
 
     _clearIntervals() {
         [this._syncAuctionLoop, this._updateTimeLoop].forEach((interval) => clearInterval(interval));
     },
 
-    componentWillUnmount() {
-        this._clearIntervals();
-    },
-
-    getInitialState() {
-        return {
-            bids: []
-        };
-    },
-
     onBid(event, value) {
         const url = '/api/1';
-        fetch(`${url}/room/${this.props.params.id}/bid`, {
+        fetch(`${url}/room/${this.state.data.id}/bid`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -212,11 +224,7 @@ const SingleAuctionLayout = React.createClass({
     },
 
     render() {
-        let { image, bids, highestBid = {} } = this.state;
-
-        if (this.state.error === 404) {
-            return (<Empty/>);
-        }
+        let { image, bids, highestBid } = this.state;
 
         return (
             <div>
@@ -227,14 +235,11 @@ const SingleAuctionLayout = React.createClass({
                 <img src={ image } className="logo"/>
                 <div className="container text-center">
 
-                    {/* NAME, LOCATION AND MINIMUM BID */}
-                    <Header data={this.state}/>
-
                     {/* BID FORM */}
-                    { this.state.active ? <BidForm data={this.state} onBid={this.onBid}/> : '' }
+                    <BidForm data={this.state} onBid={this.onBid}/> : '' }
 
                     {/* BID LIST */}
-                    { bids.length > 0 ? <BidList data={this.state.bids} winner={this.state.highestBid}/> : '' }
+                    <BidList data={this.state.bids} winner={this.state.highestBid}/> : '' }
 
                     {/* SUCCESS MESSAGES */}
                     { this.state.success ? <Message className="alert alert-success" message={this.state.success}/> : '' }
@@ -246,6 +251,75 @@ const SingleAuctionLayout = React.createClass({
             </div>
         );
     }
+});
+
+const EndedSingleAuction = (props) => {
+
+    let {
+        data: {
+            bids,
+            highestBid
+        }
+    } = props;
+
+    return (
+        <div>
+            <BidList data={bids} winner={highestBid}/>
+        </div>
+    );
+};
+
+EndedSingleAuction.propTypes = {
+    data: React.PropTypes.object
+};
+
+const SingleAuctionLayout = React.createClass({
+
+    propTypes: {
+        params: React.PropTypes.shape({
+            id: React.PropTypes.string.isRequired
+        })
+    },
+
+    componentDidMount() {
+        this._fetch();
+    },
+
+    getInitialState() {
+        return {
+            bids: [],
+            highestBid: {}
+        };
+    },
+
+    _fetch() {
+        const url = `/api/1/room/${this.props.params.id}`;
+        _fetch(url)
+            .then((data) => this.setState(data));
+    },
+
+    render() {
+        let { name, image, active, error = '' } = this.state;
+
+        if (error) {
+            return <ErrorLayout error={error} />;
+        }
+
+        return (
+            <div>
+                <ol className="breadcrumb">
+                    <li><Link to="/rooms">List</Link></li>
+                    <li className="active">{name}</li>
+                </ol>
+                <img src={ image } className="logo"/>
+                <div className="container text-center">
+                    <Header data={this.state}/>
+                    { active ? <ActiveSingleAuction data={this.state}/> : <EndedSingleAuction data={this.state}/> }
+                </div>
+            </div>
+        );
+    }
+
 });
 
 export default SingleAuctionLayout;
