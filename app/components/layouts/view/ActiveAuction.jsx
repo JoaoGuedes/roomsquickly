@@ -1,10 +1,10 @@
 import React from 'react';
-import { _fetch } from '../helpers/api';
-import BidForm from '../BidForm.jsx';
-import BidList from '../BidList.jsx';
-import Message from '../Message.jsx';
+import { _fetch } from '../../helpers/api';
+import BidForm from '../../BidForm.jsx';
+import BidList from '../../BidList.jsx';
+import Message from '../../Message.jsx';
 
-const ActiveSingleAuction = React.createClass({
+const ActiveAuction = React.createClass({
 
     propTypes: {
         data: React.PropTypes.object
@@ -108,4 +108,4 @@ const ActiveSingleAuction = React.createClass({
     }
 });
 
-export default ActiveSingleAuction;
+export default ActiveAuction;

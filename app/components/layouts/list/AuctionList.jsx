@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
-import Jumbo from '../Jumbo.jsx';
+import Jumbo from '../../Jumbo.jsx';
 
 const AuctionListLayout = React.createClass({
 

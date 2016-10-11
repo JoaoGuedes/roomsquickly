@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { _fetch } from '../helpers/api';
-import Jumbo from '../Jumbo.jsx';
-import Empty from '../EmptyList.jsx';
-import ErrorLayout from './Error.jsx';
-import ActiveSingleAuction from './ActiveSingleAuction.jsx';
-import EndedSingleAuction from './EndedSingleAuction.jsx';
+import { _fetch } from '../../helpers/api';
+import Jumbo from '../../Jumbo.jsx';
+import Empty from '../../EmptyList.jsx';
+import ErrorLayout from '../Error.jsx';
+import ActiveAuction from './ActiveAuction.jsx';
+import EndedAuction from './EndedAuction.jsx';
 
 /**
  * Layout components
@@ -36,7 +36,7 @@ Header.propTypes = {
  * Layouts
  */
 
-const SingleAuctionLayout = React.createClass({
+const AuctionView = React.createClass({
 
     propTypes: {
         params: React.PropTypes.shape({
@@ -65,7 +65,14 @@ const SingleAuctionLayout = React.createClass({
         let { name, image, active, error } = this.state;
 
         if (error) {
-            return <ErrorLayout error={error} />;
+            return (
+                <div>
+                    <ol className="breadcrumb">
+                        <li><Link to="/rooms">List</Link></li>
+                    </ol>
+                    <ErrorLayout error={error} />
+                </div>
+            );
         }
 
         return (
@@ -77,7 +84,7 @@ const SingleAuctionLayout = React.createClass({
                 <img src={ image } className="logo"/>
                 <div className="container text-center">
                     <Header data={this.state}/>
-                    { active ? <ActiveSingleAuction data={this.state}/> : <EndedSingleAuction data={this.state}/> }
+                    { active ? <ActiveAuction data={this.state}/> : <EndedAuction data={this.state}/> }
                 </div>
             </div>
         );
@@ -85,4 +92,4 @@ const SingleAuctionLayout = React.createClass({
 
 });
 
-export default SingleAuctionLayout;
+export default AuctionView;

@@ -7,10 +7,10 @@ import {
     IndexRedirect
 } from 'react-router';
 import { AppLayout } from 'components/layouts/App.jsx';
-import AuctionListLayout from 'components/layouts/AuctionList.jsx';
-import ActiveAuctionsLayout from 'components/layouts/ActiveAuctions.jsx';
-import EndedAuctionsLayout from 'components/layouts/EndedAuctions.jsx';
-import SingleAuctionLayout from 'components/layouts/SingleAuction.jsx';
+import AuctionListLayout from 'components/layouts/list/AuctionList.jsx';
+import ActiveAuctionsLayout from 'components/layouts/list/ActiveAuctions.jsx';
+import EndedAuctionsLayout from 'components/layouts/list/EndedAuctions.jsx';
+import AuctionViewLayout from 'components/layouts/view/AuctionView.jsx';
 
 const Routes = React.createClass({
     render() {
@@ -23,7 +23,7 @@ const Routes = React.createClass({
                         <Route path="active" component={ActiveAuctionsLayout}/>
                         <Route path="ended" component={EndedAuctionsLayout}/>
                     </Route>
-                    <Route path="room/:id" component={SingleAuctionLayout}/>
+                    <Route path="room/:id" component={AuctionViewLayout}/>
                 </Route>
                 <Route path="*">
                     <IndexRedirect to="/"/>

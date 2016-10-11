@@ -1,6 +1,8 @@
 import React from 'react';
-import AuctionItem from '../AuctionItem.jsx';
-import EmptyList from '../EmptyList.jsx';
+import { _fetch } from '../../helpers/api';
+import AuctionItem from '../../AuctionItem.jsx';
+import EmptyList from '../../EmptyList.jsx';
+import ErrorLayout from '../Error.jsx';
 
 const ActiveAuctionsLayout = React.createClass({
 
@@ -8,22 +10,18 @@ const ActiveAuctionsLayout = React.createClass({
         setActiveTab: React.PropTypes.func
     },
 
-    _fetch() {
+    getAuctions() {
         const url = '/api/1';
-        fetch(`${url}/rooms/active`)
-            .then((data) => {
-                return data.json();
-            })
-            .then((json) => {
-                this.setState({ collection: json });
-            })
-            .catch((err) => console.log(err));
+        _fetch(`${url}/rooms/active`)
+            .then((state) => {
+                this.setState( state.error ? state : { collection: state });
+            });
     },
 
     componentDidMount() {
         this.context.setActiveTab('active');
-        this._fetch();
-        this._syncAuctionLoop = setInterval(this._fetch, 5000);
+        this.getAuctions();
+        this._syncAuctionLoop = setInterval(this.getAuctions, 5000);
         this._updateTimeLoop = setInterval(() => this.setState({
             collection: this.state.collection.map((item) => {
                 let clone = { ...item };
@@ -47,13 +45,19 @@ const ActiveAuctionsLayout = React.createClass({
     },
 
     render() {
+
+        let { error, collection = [] } = this.state;
+        if (error) {
+            return <ErrorLayout error={error} />;
+        }
+
         return (
             <div>
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
                             {
-                                this.state.collection.length > 0 ?
+                                collection.length > 0 ?
                                     this.state.collection.map((item, index) => <AuctionItem key={index} data={item} />) :
                                     <EmptyList/>
                             }

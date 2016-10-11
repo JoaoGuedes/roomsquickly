@@ -1,7 +1,7 @@
 import React from 'react';
-import BidList from '../BidList.jsx';
+import BidList from '../../BidList.jsx';
 
-const EndedSingleAuction = (props) => {
+const EndedAuction = (props) => {
 
     let {
         data: {
@@ -17,8 +17,8 @@ const EndedSingleAuction = (props) => {
     );
 };
 
-EndedSingleAuction.propTypes = {
+EndedAuction.propTypes = {
     data: React.PropTypes.object
 };
 
-export default EndedSingleAuction;
+export default EndedAuction;

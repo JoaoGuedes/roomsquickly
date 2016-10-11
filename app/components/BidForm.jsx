@@ -5,8 +5,13 @@ const BidForm = (props) => {
 
     const onSubmit = (event, value) => {
         event.preventDefault();
+
+        if (!value) {
+            return;
+        }
+
         props.onBid(event, _bid.value);
-        _bid.value = undefined;
+        _bid.value = '';
     };
 
     let {

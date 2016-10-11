@@ -1,6 +1,6 @@
 import React from 'react';
 
-const BidList = (props) => {
+const Table = (props) => {
 
     let { data = [], winner = {}, active } = props;
     if (data.length > 0) {
@@ -50,10 +50,50 @@ const BidList = (props) => {
     return (<div></div>);
 };
 
-BidList.propTypes = {
+Table.propTypes = {
     data: React.PropTypes.array,
     active: React.PropTypes.bool,
     winner: React.PropTypes.object
 };
+
+const BidList = React.createClass({
+
+    propTypes: {
+        data: React.PropTypes.array,
+        active: React.PropTypes.bool,
+        winner: React.PropTypes.object
+    },
+
+    handleChange(event) {
+        if (!event.target.value) {
+            return this.setState({ data: this.props.data });
+        }
+        let newState = this.state.data.filter((item) => event.target.value === item.bid_id);
+        this.setState({ data: newState });
+    },
+
+    getInitialState() {
+        return {
+            data: this.props.data
+        };
+    },
+
+    componentWillReceiveProps(nextProps) {
+        this.setState({
+            data: nextProps.data
+        });
+    },
+
+    render() {
+        let { active, winner } = this.props;
+        let { data } = this.state;
+        return (
+            <div>
+                <input className="form-control" onChange={this.handleChange}/>            
+                <Table data={data} active={active} winner={winner}/>
+            </div>
+        );
+    }
+});
 
 export default BidList;

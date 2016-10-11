@@ -1,6 +1,8 @@
 import React from 'react';
-import AuctionItem from '../AuctionItem.jsx';
-import EmptyList from '../EmptyList.jsx';
+import { _fetch } from '../../helpers/api';
+import AuctionItem from '../../AuctionItem.jsx';
+import EmptyList from '../../EmptyList.jsx';
+import ErrorLayout from '../Error.jsx';
 
 const EndedAuctionsLayout = React.createClass({
 
@@ -8,17 +10,18 @@ const EndedAuctionsLayout = React.createClass({
         setActiveTab: React.PropTypes.func
     },
 
+    getAuctions() {
+        const url = '/api/1';
+        _fetch(`${url}/rooms/ended`)
+            .then((state) => {
+                this.setState( state.error ? state : { collection: state });
+            });
+    },
+
     componentDidMount() {
         this.context.setActiveTab('ended');
         const url = '/api/1';
-        fetch(`${url}/rooms/ended`)
-            .then((data) => {
-                return data.json();
-            })
-            .then((json) => {
-                this.setState({ collection: json });
-            })
-            .catch((err) => console.log(err));
+        this.getAuctions();
     },
 
     getInitialState() {
@@ -28,14 +31,21 @@ const EndedAuctionsLayout = React.createClass({
     },
 
     render() {
+
+        let { error, collection = [] } = this.state;
+
+        if (error) {
+            return <ErrorLayout error={error} />;
+        }
+
         return (
             <div>
                 <div className="container">
                     <div className="row">
                         <div className="col-sm-12">
                             {
-                                this.state.collection.length > 0 ?
-                                    this.state.collection.map((item, index) => <AuctionItem key={index} data={item}/>) :
+                                collection.length > 0 ?
+                                    collection.map((item, index) => <AuctionItem key={index} data={item}/>) :
                                     <EmptyList/>
                             }
                         </div>

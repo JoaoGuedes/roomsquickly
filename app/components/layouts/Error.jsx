@@ -7,9 +7,6 @@ const ErrorLayout = (props) => {
 
     return (
         <div>
-            <ol className="breadcrumb">
-                <li><Link to="/rooms">List</Link></li>
-            </ol>
             <div className="container pad">
                 <div className="row">
                     <div className="col-sm-8 col-center">
