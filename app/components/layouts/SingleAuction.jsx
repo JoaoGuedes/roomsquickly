@@ -3,28 +3,68 @@ import { Link } from 'react-router';
 import Jumbo from '../Jumbo.jsx';
 import Empty from '../EmptyList.jsx';
 
-const ActiveAuction = (props) => {
+const BidForm = (props) => {
     let _bid;
     return (
-        <div>
+        <div className="row" style={{ marginBottom: '30px' }}>
             <h3>{`${ props.data.remaining.minutes }:${ props.data.remaining.seconds }`}</h3>
             <form className="form-inline" onSubmit={(event) => props.onBid(event, _bid.value)}>
               <div className="form-group">
-                <input type="text" ref={(input) => _bid = input} className="form-control" placeholder="Search"/>
+                <input type="text" ref={(input) => _bid = input} className="form-control" placeholder={props.data.minimum_bid} />
               </div>
-              <button type="submit" className="btn btn-success">Submit</button>
+              <button type="submit" className="btn btn-success" style={{ marginLeft: '10px' }}>Bid</button>
             </form>
         </div>
     );
 };
 
-ActiveAuction.propTypes = {
+BidForm.propTypes = {
     data: React.PropTypes.object.isRequired,
     onBid: React.PropTypes.func.isRequired
 };
 
-const EndedAuction = (props) => {
-    return (<div></div>);
+const BidList = (props) => {
+
+    let { data, winner } = props;
+
+    return (
+    <div className="row" style={{ marginTop: '30px' }}>
+        <div className="col-sm-12">
+            <div className="col-sm-4 col-center">
+                <div className="panel panel-info">
+                    <div className="panel-heading">Bids</div>
+                    <table className="table">
+                        <tbody>
+                            { data
+                                .map((bid, index) => {
+                                    if (bid.bid_id === winner.bid_id) {
+                                        return (
+                                            <tr key={index} className="text-center active">
+                                                <td>
+                                                    <span className="glyphicon glyphicon-star sunflower-dark"></span>
+                                                     &nbsp; { parseFloat(bid.value).toFixed(3) } ฿
+                                                </td>
+                                            </tr>);
+                                    }
+                                    else {
+                                        return (
+                                            <tr key={index} className="text-center">
+                                                <td>{ parseFloat(bid.value).toFixed(3) } ฿</td>
+                                            </tr>);
+                                    }
+                                })
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>);
+};
+
+BidList.propTypes = {
+    data: React.PropTypes.array,
+    winner: React.PropTypes.object
 };
 
 const SingleAuctionLayout = React.createClass({
@@ -50,6 +90,11 @@ const SingleAuctionLayout = React.createClass({
             })
             .then((state) => {
                 this.setState(state);
+
+                if (!state.active) {
+                    this._clearIntervals();
+                }
+
                 return state;
             })
             .catch((err) => console.log(err));
@@ -61,11 +106,6 @@ const SingleAuctionLayout = React.createClass({
                 if (state.active) {
                     this._syncAuctionLoop = setInterval(this._fetch, 5000);
                     this._updateTimeLoop = setInterval(() => {
-
-                        if (!this.state.active) {
-                            clearInterval(this._updateTimeLoop);
-                        }
-
                         const now = new Date(Date.now() > this.state.end ? 0 : this.state.end - Date.now());
                         const data = {
                             ...this.state,
@@ -80,8 +120,12 @@ const SingleAuctionLayout = React.createClass({
             });
     },
 
-    componentWillUnmount() {
+    _clearIntervals() {
         [this._syncAuctionLoop, this._updateTimeLoop].forEach((interval) => clearInterval(interval));
+    },
+
+    componentWillUnmount() {
+        this._clearIntervals();
     },
 
     getInitialState() {
@@ -117,7 +161,7 @@ const SingleAuctionLayout = React.createClass({
     },
 
     render() {
-        let { image, name, location, bids, minimum_bid } = this.state;
+        let { image, name, location, bids, minimum_bid, highestBid = {} } = this.state;
 
         if (this.state.error === 404) {
             return (<Empty/>);
@@ -129,22 +173,33 @@ const SingleAuctionLayout = React.createClass({
                     <li><Link to="/rooms">List</Link></li>
                     <li className="active">{name}</li>
                 </ol>
-                <img src={ image }/>
-                <div className="container">
+                <img src={ image } className="logo"/>
+                <div className="container text-center">
+
+                    {/* NAME, LOCATION AND MINIMUM BID */}
                     <div className="row">
-                        <div className="col-sm-12 text-center">
-                            <h1>{ name }</h1>
-                            <span className="glyphicon glyphicon-map-marker"></span> { location }
-                            <span className="glyphicon glyphicon-map-marker"></span> { minimum_bid }
-                            { this.state.error ? <div className="alert alert-danger">
-                              <strong>{ this.state.error }</strong>
-                            </div> : '' }
-                            <ul>
-                            { bids.map((bid, index) => <li key={index}>{bid.value}</li>) }
-                            </ul>
-                            { this.state.active ? <ActiveAuction data={this.state} onBid={this.onBid}/> : <EndedAuction data={this.state}/> }
+                        <div className="col-sm-12">
+                            <div>
+                                <h1>{ name }</h1>
+                                <div>
+                                    <p><span className="glyphicon glyphicon-map-marker"></span> { location }</p>
+                                    <p><b>Minimum bid</b>: { minimum_bid } ฿</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
+
+                    {/* BID LIST */}
+                    { bids.length > 0 ? <BidList data={this.state.bids} winner={this.state.highestBid}/> : '' }
+
+                    {/* ERRORS */}
+                    { this.state.error ? <div className="alert alert-danger">
+                      <strong>{ this.state.error }</strong>
+                    </div> : '' }
+
+                    {/* BID FORM */}
+                    { this.state.active ? <BidForm data={this.state} onBid={this.onBid}/> : '' }
+
                 </div>
             </div>
         );

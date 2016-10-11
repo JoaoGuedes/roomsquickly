@@ -21,7 +21,7 @@ const AuctionItemActive = (props) => {
                 <div className="caption text-center">
                     <h1>{name}</h1>
                     <span className="glyphicon glyphicon-map-marker"></span>
-                    <small> {props.data.location}</small>
+                    <small> {location}</small>
                     <h2>{`${minutes}:${seconds}`}</h2>
                     <span className={`label label-${ bids.length > 0 ? 'primary' : 'success' }`}>{ bids.length } bids</span>
                 </div>
@@ -42,7 +42,7 @@ AuctionItemActive.propTypes = {
             minutes : React.PropTypes.string,
             seconds : React.PropTypes.string
         }),
-        winning_bid : React.PropTypes.obj
+        highestBid : React.PropTypes.obj
     })
 };
 
@@ -50,7 +50,7 @@ const AuctionItemEnded = (props) => {
 
     let {
         data: {
-            id, image, name, location, end, winning_bid, bids
+            id, image, name, location, end, highestBid, bids
         }
     } = props;
 
@@ -64,8 +64,8 @@ const AuctionItemEnded = (props) => {
                         <span className="glyphicon glyphicon-map-marker"></span>
                         <small> {location}</small>
                         <p>
-                            <span className={`glyphicon glyphicon-star${ winning_bid ? '' : '-empty'}`}></span>
-                            <small> { winning_bid ? winning_bid.value : 'No winners' }</small>
+                            <span className={`glyphicon glyphicon-star${ highestBid ? '' : '-empty'}`}></span>
+                            <small> { highestBid ? `${parseFloat(highestBid.value).toFixed(3)} ฿` : 'No winners' }</small>
                         </p>
                     </div>
                     <p><small>Ended at {formatDate(new Date(end))}</small></p>
