@@ -3,24 +3,29 @@ import { Link } from 'react-router';
 import Jumbo from '../Jumbo.jsx';
 import Empty from '../EmptyList.jsx';
 
-const BidForm = (props) => {
-    let _bid;
+/**
+ * Layout components
+ */
+const Header = (props) => {
+
+    let { data: { name, location, minimum_bid } } = props;
     return (
-        <div className="row" style={{ marginBottom: '30px' }}>
-            <h3>{`${ props.data.remaining.minutes }:${ props.data.remaining.seconds }`}</h3>
-            <form className="form-inline" onSubmit={(event) => props.onBid(event, _bid.value)}>
-              <div className="form-group">
-                <input type="number" ref={(input) => _bid = input} className="form-control" placeholder={props.data.minimum_bid} />
-              </div>
-              <button type="submit" className="btn btn-success" style={{ marginLeft: '10px' }}>Bid</button>
-            </form>
+        <div className="row">
+            <div className="col-sm-12">
+                <div>
+                    <h1>{ name }</h1>
+                    <div>
+                        <p><span className="glyphicon glyphicon-map-marker"></span> { location }</p>
+                        <p><b>Minimum bid</b>: { minimum_bid } ฿</p>
+                    </div>
+                </div>
+            </div>
         </div>
     );
 };
 
-BidForm.propTypes = {
-    data: React.PropTypes.object.isRequired,
-    onBid: React.PropTypes.func.isRequired
+Header.propTypes = {
+    data: React.PropTypes.object.isRequired
 };
 
 const BidList = (props) => {
@@ -67,6 +72,34 @@ BidList.propTypes = {
     winner: React.PropTypes.object
 };
 
+const BidForm = (props) => {
+    let _bid;
+
+    const onSubmit = (event, value) => {
+        event.preventDefault();
+        props.onBid(event, _bid.value);
+        _bid.value = undefined;
+    };
+
+    let { data: { remaining: { minutes, seconds }, minimum_bid } } = props;
+    return (
+        <div className="row" style={{ marginBottom: '30px' }}>
+            <h3>{`${ minutes }:${ seconds }`}</h3>
+            <form className="form-inline" onSubmit={(event) => onSubmit(event, _bid.value)}>
+              <div className="form-group">
+                <input type="number" ref={(input) => _bid = input} className="form-control" min={minimum_bid} placeholder={minimum_bid} />
+              </div>
+              <button type="submit" className="btn btn-success" style={{ marginLeft: '10px' }}>Bid</button>
+            </form>
+        </div>
+    );
+};
+
+BidForm.propTypes = {
+    data: React.PropTypes.object.isRequired,
+    onBid: React.PropTypes.func.isRequired
+};
+
 const Message = (props) => {
     const { className, message } = props;
     return <div className={`${className} navbar-fixed-bottom`} dangerouslySetInnerHTML={{ __html: message }} />;
@@ -76,6 +109,10 @@ Message.propTypes = {
     className: React.PropTypes.string,
     message: React.PropTypes.string.isRequired
 };
+
+/**
+ * Layouts
+ */
 
 const SingleAuctionLayout = React.createClass({
 
@@ -144,7 +181,6 @@ const SingleAuctionLayout = React.createClass({
     },
 
     onBid(event, value) {
-        event.preventDefault();
         const url = '/api/1';
         fetch(`${url}/room/${this.props.params.id}/bid`, {
             method: 'POST',
@@ -156,30 +192,27 @@ const SingleAuctionLayout = React.createClass({
         })
             .then((data) => {
                 if (!data.ok) {
-                    return {
-                        ...this.state,
-                        error: 'Invalid bid',
-                        success: ''
-                    };
+                    return data.json()
+                        .then((data) => ({
+                            error: 'Invalid bid',
+                            success: ''
+                        }));
                 }
+                let message = 'Bid id <strong>%id%</strong> with value <strong>%value% ฿</strong> has been placed';
                 return data.json()
-                        .then((bid) => {
-                            return {
-                                ...this.state,
-                                success: `Bid id <strong>${bid.bid_id}</strong> with value <strong>${bid.value}฿</strong> has been placed`,
-                                error: ''
-                            };
-                        });
-
+                    .then((data) => ({
+                        error: '',
+                        success: message.replace('%id%', data.bid_id).replace('%value%', data.value)
+                    }));
             })
             .then((data) => {
-                this.setState({ ...data });
+                this.setState({ ...this.state, ...data });
             })
             .catch((err) => console.log(err));
     },
 
     render() {
-        let { image, name, location, bids, minimum_bid, highestBid = {} } = this.state;
+        let { image, bids, highestBid = {} } = this.state;
 
         if (this.state.error === 404) {
             return (<Empty/>);
@@ -195,17 +228,7 @@ const SingleAuctionLayout = React.createClass({
                 <div className="container text-center">
 
                     {/* NAME, LOCATION AND MINIMUM BID */}
-                    <div className="row">
-                        <div className="col-sm-12">
-                            <div>
-                                <h1>{ name }</h1>
-                                <div>
-                                    <p><span className="glyphicon glyphicon-map-marker"></span> { location }</p>
-                                    <p><b>Minimum bid</b>: { minimum_bid } ฿</p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <Header data={this.state}/>
 
                     {/* BID FORM */}
                     { this.state.active ? <BidForm data={this.state} onBid={this.onBid}/> : '' }
@@ -218,7 +241,7 @@ const SingleAuctionLayout = React.createClass({
 
                     {/* ERRORS */}
                     { this.state.error ? <Message className="alert alert-danger" message={this.state.error}/> : '' }
-                    
+
                 </div>
             </div>
         );
