@@ -67,35 +67,14 @@ BidList.propTypes = {
     winner: React.PropTypes.object
 };
 
-const Errors = (props) => {
-    let { data } = props;
-    let result = Object.keys(data).map((error, index) => {
-        if (data[error]) {
-            return <div className="alert alert-danger" key={index}>
-                { data[error] }
-            </div>;
-        }
-    });
-    return (<div>{result}</div>);
+const Message = (props) => {
+    const { className, message } = props;
+    return <div className={`${className} navbar-fixed-bottom`} dangerouslySetInnerHTML={{ __html: message }} />;
 };
 
-Errors.propTypes = {
-    data: React.PropTypes.object.isRequired
-};
-
-const Successes = (props) => {
-    let { data } = props;
-    let result = Object.keys(data).map((success, index) => {
-        if (data[success]) {
-            return <div className="alert alert-success" key={index}
-            dangerouslySetInnerHTML={{ __html: data[success] }}/>;
-        }
-    });
-    return (<div>{result}</div>);
-};
-
-Successes.propTypes = {
-    data: React.PropTypes.object.isRequired
+Message.propTypes = {
+    className: React.PropTypes.string,
+    message: React.PropTypes.string.isRequired
 };
 
 const SingleAuctionLayout = React.createClass({
@@ -139,7 +118,6 @@ const SingleAuctionLayout = React.createClass({
                     this._updateTimeLoop = setInterval(() => {
                         const now = new Date(Date.now() > this.state.end ? 0 : this.state.end - Date.now());
                         const data = {
-                            ...this.state,
                             remaining: {
                                 minutes: `${now.getMinutes() < 10 ? 0 : ''}${now.getMinutes()}`,
                                 seconds: `${now.getSeconds() < 10 ? 0 : ''}${now.getSeconds()}`
@@ -180,28 +158,16 @@ const SingleAuctionLayout = React.createClass({
                 if (!data.ok) {
                     return {
                         ...this.state,
-                        errors: {
-                            ...this.state.errors,
-                            bid: 'Invalid bid'
-                        },
-                        successes: {
-                            ...this.state.successes,
-                            bid: undefined
-                        }
+                        error: 'Invalid bid',
+                        success: ''
                     };
                 }
                 return data.json()
                         .then((bid) => {
                             return {
                                 ...this.state,
-                                successes: {
-                                    ...this.state.successes,
-                                    bid: `Bid id <strong>${bid.bid_id}</strong> with value <strong>${bid.value}฿</strong> has been placed`
-                                },
-                                errors: {
-                                    ...this.state.errors,
-                                    bid: undefined
-                                }
+                                success: `Bid id <strong>${bid.bid_id}</strong> with value <strong>${bid.value}฿</strong> has been placed`,
+                                error: ''
                             };
                         });
 
@@ -244,15 +210,15 @@ const SingleAuctionLayout = React.createClass({
                     {/* BID FORM */}
                     { this.state.active ? <BidForm data={this.state} onBid={this.onBid}/> : '' }
 
-                    {/* SUCCESS MESSAGES */}
-                    { this.state.successes ? <Successes data={this.state.successes}/> : '' }
-
-                    {/* ERRORS */}
-                    { this.state.errors ? <Errors data={this.state.errors}/> : '' }
-
                     {/* BID LIST */}
                     { bids.length > 0 ? <BidList data={this.state.bids} winner={this.state.highestBid}/> : '' }
 
+                    {/* SUCCESS MESSAGES */}
+                    { this.state.success ? <Message className="alert alert-success" message={this.state.success}/> : '' }
+
+                    {/* ERRORS */}
+                    { this.state.error ? <Message className="alert alert-danger" message={this.state.error}/> : '' }
+                    
                 </div>
             </div>
         );
