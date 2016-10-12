@@ -1,32 +1,15 @@
 import Router from 'express';
 
+import { enrichAuctions } from '~/lib/utils';
 import seed from '~/test/unit/fixtures/rooms';
 import RoomsInteractor from '~/interactors/rooms';
 import RoomsRepository from '~/repositories/rooms';
 import RoomsPresenter from '~/presenters/rooms';
 
 const interactor = new RoomsInteractor({
-    repository: new RoomsRepository({ seed }),
+    repository: new RoomsRepository({ seed: enrichAuctions(seed) }),
     presenter: new RoomsPresenter()
 });
-
-interactor.create([
-    {
-        name: 'Lounge',
-        image: 'https://a2.muscache.com/im/pictures/7f9e0bc8-f374-46f8-a7b0-8c99342bd19b.jpg?aki_policy=xx_large',
-        location: 'Porto, Portugal',
-        minimum_bid: 10,
-        start: Date.now(),
-        end: Date.now() + 1000*60*0.5
-    },
-    {
-        name: 'Presidential suite',
-        image: 'https://a0.muscache.com/im/pictures/23832986/868a53b8_original.jpg?aki_policy=xx_large',
-        location: 'Lisbon, Portugal',
-        minimum_bid: 100,
-        start: Date.now() + 1000
-    }
-]);
 
 export default Router({ mergeParams: true })
     .get('/rooms', (req, res, next) => {

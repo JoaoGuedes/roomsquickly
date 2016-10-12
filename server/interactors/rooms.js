@@ -1,16 +1,8 @@
-import Promise from 'bluebird';
-
 export default class Interactor {
 
     constructor({ repository, presenter }) {
         this._repository = repository;
         this._presenter = presenter;
-    }
-
-    create(rooms) {
-        const promises = rooms.map((room) => this.repository.create(room));
-        return Promise.all(promises)
-            .then((rooms) => this.presenter.present(rooms));
     }
 
     getOne({ id }) {
@@ -37,16 +29,6 @@ export default class Interactor {
     bid({ id, value }) {
         return this.repository.bid({ id, value })
                 .then(([head]) => head);
-    }
-
-    isBidIDWinner({ bid_id }) {
-        return this.repository.getAll()
-            .then((rooms) => this.presenter.present(rooms))
-            .then((filtered) => filtered.filter((room) => {
-                const isWinner = room.highestBid ? room.highestBid.bid_id.toUpperCase() === bid_id.toUpperCase() : false;
-                return !room.active && isWinner;
-            }))
-            .then(([head]) => head);
     }
 
     get repository() {

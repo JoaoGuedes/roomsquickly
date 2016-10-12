@@ -8,7 +8,7 @@ export default class Presenter {
         }
         const NOW = Date.now();
         return data.map((room) => {
-            const bids = _.cloneDeep(room.bids).reverse();
+            const bids = _.cloneDeep(room.bids || []).reverse();
             if (!room || !room.active) {
                 return { ...room, bids };
             }

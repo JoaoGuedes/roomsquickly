@@ -3,8 +3,7 @@
         "name": "The Great Suite",
         "image": "https://a0.muscache.com/im/pictures/24538580/7d4b34f6_original.jpg?aki_policy=xx_large",
         "location": "Cambridge, UK",
-        "minimum_bid": 60,
-        "start": 1475580099689
+        "minimum_bid": 60
     },
     {
         "name": "Le Grand Suite",
@@ -35,33 +34,5 @@
         "image": "https://a2.muscache.com/im/pictures/87623280/978e1e89_original.jpg?aki_policy=xx_large",
         "location": "Celeryville, USA",
         "minimum_bid": 34
-    },
-    {
-        "name": "The Great Suite",
-        "image": "https://www.skycityauckland.co.nz/media/338920/Premium-Luxury-Suite-tile.jpg",
-        "location": "Cambridge, UK",
-        "minimum_bid": 60,
-        "start": 1475580099689
-    },
-    {
-        "name": "The Great Suite",
-        "image": "https://www.skycityauckland.co.nz/media/338920/Premium-Luxury-Suite-tile.jpg",
-        "location": "Cambridge, UK",
-        "minimum_bid": 60,
-        "start": 1475580099689
-    },
-    {
-        "name": "The Great Suite",
-        "image": "https://www.skycityauckland.co.nz/media/338920/Premium-Luxury-Suite-tile.jpg",
-        "location": "Cambridge, UK",
-        "minimum_bid": 60,
-        "start": 1475580099689
-    },
-    {
-        "name": "The Great Suite",
-        "image": "https://www.skycityauckland.co.nz/media/338920/Premium-Luxury-Suite-tile.jpg",
-        "location": "Cambridge, UK",
-        "minimum_bid": 60,
-        "start": 1475580099689
     }
 ]

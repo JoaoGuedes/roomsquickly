@@ -82,10 +82,6 @@ export default class Repository {
                 finishTime = start + (duration * MINUTE);
             end = end || finishTime;  //Set duration of auction
 
-            /*if (start < NOW) {
-                return reject(new HTTPError('Auction date cannot be in the past').BadRequest());
-            }*/
-
             if (end < start) {
                 return reject(new HTTPError('Auction end date cannot be before start date').BadRequest());
             }
@@ -127,20 +123,6 @@ export default class Repository {
             return resolve([room]);
         });
     }
-
-    /*update({ id, ...values }) {
-        return this.getById(id)
-            .then(([room]) => {
-                if (!room) {
-                    throw new HTTPError('Room not found').NotFound();
-                }
-                room = {
-                    ...room,
-                    ...values
-                };
-                return [room];
-            });
-    }*/
 
     bid({ id, value }) {
         return this.getById(id)
