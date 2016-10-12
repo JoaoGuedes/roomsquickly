@@ -24,10 +24,13 @@ const BidForm = (props) => {
         <div className="row" style={{ marginBottom: '30px' }}>
             <h3>{`${ minutes }:${ seconds }`}</h3>
             <form className="form-inline" onSubmit={(event) => onSubmit(event, _bid.value)}>
-              <div className="form-group">
-                <input type="number" ref={(input) => _bid = input} className="form-control" min={minimum_bid} placeholder={minimum_bid} />
-              </div>
-              <button type="submit" className="btn btn-success" style={{ marginLeft: '10px' }}>Bid</button>
+                <div className="form-group">
+                    <div className="input-group" style={{ padding: '10px' }}>
+                        <input type="number" ref={(input) => _bid = input} className="form-control" min={minimum_bid} placeholder={minimum_bid} />
+                        <span className="input-group-addon">฿</span>
+                    </div>
+                    <button type="submit" className="form-control btn btn-primary">Bid</button>
+                </div>
             </form>
         </div>
     );

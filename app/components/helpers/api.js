@@ -8,7 +8,7 @@ export const _fetch = (url) => {
             if (data.status >= 400) {
                 return { error: data.statusText };
             }
-            return data.json();
+            return data.json().then((data) => ({ data }));
         })
         .catch((error) => ({ error }));
 };

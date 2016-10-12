@@ -13,14 +13,6 @@ const Navigation = (props) => {
                     </button>
                     <Link to="/" className="navbar-brand">RoomsQuickly</Link>
                 </div>
-                <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                    <form className="navbar-form navbar-right" role="search">
-                        <div className="form-search search-only">
-                            <i className="search-icon glyphicon glyphicon-search"></i>
-                            <input type="text" placeholder="Search bid ID" className="form-control search-query"/>
-                        </div>
-                    </form>
-                </div>
         </nav>
     );
 };

@@ -10,18 +10,22 @@ const EndedAuctionsLayout = React.createClass({
         setActiveTab: React.PropTypes.func
     },
 
-    getAuctions() {
+    _getAuctions() {
         const url = '/api/1';
         _fetch(`${url}/rooms/ended`)
             .then((state) => {
-                this.setState( state.error ? state : { collection: state });
+                const { error, data = [] } = state;
+                this.setState({
+                    error,
+                    collection: data
+                });
             });
     },
 
     componentDidMount() {
         this.context.setActiveTab('ended');
         const url = '/api/1';
-        this.getAuctions();
+        this._getAuctions();
     },
 
     getInitialState() {

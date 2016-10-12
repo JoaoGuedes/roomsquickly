@@ -4,8 +4,8 @@ import { _fetch } from '../../helpers/api';
 import Jumbo from '../../Jumbo.jsx';
 import Empty from '../../EmptyList.jsx';
 import ErrorLayout from '../Error.jsx';
-import ActiveAuction from './ActiveAuction.jsx';
-import EndedAuction from './EndedAuction.jsx';
+import ActiveAuctionLayout from './ActiveAuction.jsx';
+import EndedAuctionLayout from './EndedAuction.jsx';
 
 /**
  * Layout components
@@ -58,7 +58,13 @@ const AuctionView = React.createClass({
     _getAuction() {
         const url = `/api/1/room/${this.props.params.id}`;
         _fetch(url)
-            .then((data) => this.setState(data));
+            .then((state) => {
+                const { error, data = {} } = state;
+                this.setState({
+                    error,
+                    ...data
+                });
+            });
     },
 
     render() {
@@ -84,7 +90,7 @@ const AuctionView = React.createClass({
                 <img src={ image } className="logo"/>
                 <div className="container text-center">
                     <Header data={this.state}/>
-                    { active ? <ActiveAuction data={this.state}/> : <EndedAuction data={this.state}/> }
+                    { active ? <ActiveAuctionLayout data={this.state}/> : <EndedAuctionLayout data={this.state}/> }
                 </div>
             </div>
         );

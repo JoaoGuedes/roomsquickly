@@ -10,18 +10,22 @@ const ActiveAuctionsLayout = React.createClass({
         setActiveTab: React.PropTypes.func
     },
 
-    getAuctions() {
+    _getAuctions() {
         const url = '/api/1';
         _fetch(`${url}/rooms/active`)
             .then((state) => {
-                this.setState( state.error ? state : { collection: state });
+                const { error, data = [] } = state;
+                this.setState({
+                    error,
+                    collection: data
+                });
             });
     },
 
     componentDidMount() {
         this.context.setActiveTab('active');
-        this.getAuctions();
-        this._syncAuctionLoop = setInterval(this.getAuctions, 5000);
+        this._getAuctions();
+        this._syncAuctionLoop = setInterval(this._getAuctions, 5000);
         this._updateTimeLoop = setInterval(() => this.setState({
             collection: this.state.collection.map((item) => {
                 let clone = { ...item };
@@ -45,8 +49,8 @@ const ActiveAuctionsLayout = React.createClass({
     },
 
     render() {
-
         let { error, collection = [] } = this.state;
+
         if (error) {
             return <ErrorLayout error={error} />;
         }

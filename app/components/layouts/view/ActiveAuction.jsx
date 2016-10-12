@@ -3,8 +3,9 @@ import { _fetch } from '../../helpers/api';
 import BidForm from '../../BidForm.jsx';
 import BidList from '../../BidList.jsx';
 import Message from '../../Message.jsx';
+import EndedAuctionLayout from './EndedAuction.jsx';
 
-const ActiveAuction = React.createClass({
+const ActiveAuctionLayout = React.createClass({
 
     propTypes: {
         data: React.PropTypes.object
@@ -40,16 +41,16 @@ const ActiveAuction = React.createClass({
     _getAuction() {
         return _fetch(`/api/1/room/${this.state.id}`)
             .then((state) => {
-                this.setState(state);
-
-                if (!state.active) {
-                    this._clearIntervals();
-                }
+                const { error, data = {} } = state;
+                this.setState({
+                    error,
+                    ...data
+                });
             });
     },
 
     getInitialState() {
-        return Object.assign({}, this.props.data);
+        return { ...this.props.data };
     },
 
     onBid(event, value) {
@@ -86,26 +87,27 @@ const ActiveAuction = React.createClass({
     render() {
         let { image, bids, highestBid, name, active, success, error } = this.state;
 
+        if (!active) {
+            this._clearIntervals();
+            return <EndedAuctionLayout data={this.state}/>;
+        }
+
         return (
             <div>
-                <div className="container text-center">
+                {/* BID FORM */}
+                <BidForm data={this.state} onBid={this.onBid}/>
 
-                    {/* BID FORM */}
-                    <BidForm data={this.state} onBid={this.onBid}/>
+                {/* BID LIST */}
+                <BidList data={ bids } active={ true } winner={highestBid}/>
 
-                    {/* BID LIST */}
-                    <BidList data={ bids } active={ true } winner={highestBid}/>
+                {/* SUCCESS MESSAGES */}
+                { success ? <Message className="alert alert-success" message={success}/> : '' }
 
-                    {/* SUCCESS MESSAGES */}
-                    { success ? <Message className="alert alert-success" message={success}/> : '' }
-
-                    {/* ERRORS */}
-                    { error ? <Message className="alert alert-danger" message={error}/> : '' }
-
-                </div>
+                {/* ERRORS */}
+                { error ? <Message className="alert alert-danger" message={error}/> : '' }
             </div>
         );
     }
 });
 
-export default ActiveAuction;
+export default ActiveAuctionLayout;

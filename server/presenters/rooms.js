@@ -8,16 +8,15 @@ export default class Presenter {
         }
         const NOW = Date.now();
         return data.map((room) => {
+            const bids = _.cloneDeep(room.bids).reverse();
             if (!room || !room.active) {
-                return room;
+                return { ...room, bids };
             }
             const current = new Date(room.end - NOW),
                 remaining = {
                     minutes: `${current.getMinutes() < 10 ? 0 : '' }${current.getMinutes()}`,
                     seconds: `${current.getSeconds() < 10 ? 0 : '' }${current.getSeconds()}`
                 };
-
-            const bids = _.cloneDeep(room.bids).reverse();
             return {
                 ...room,
                 bids,
