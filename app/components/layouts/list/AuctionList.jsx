@@ -42,10 +42,10 @@ const AuctionListLayout = React.createClass({
                         <div className="col-sm-12">
                             <ul className="nav nav-pills">
                                 <li role="presentation" className={ this.state.activeTab === 'active' ? 'active' : '' }>
-                                    <Link to="/rooms/active">Active</Link>
+                                    <Link id="activeTab" to="/rooms/active">Active</Link>
                                 </li>
                                 <li role="presentation" className={ this.state.activeTab === 'ended' ? 'active' : '' }>
-                                    <Link to="/rooms/ended">Ended</Link>
+                                    <Link id="endedTab" to="/rooms/ended">Ended</Link>
                                 </li>
                             </ul>
                         </div>
