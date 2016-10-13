@@ -2,14 +2,21 @@ import _ from 'lodash';
 
 export default class Presenter {
 
-    present(data) {
+    /**
+     * @desc Formats output data to be consumed
+     * Reverses the bid list to appear from last to first and computes the remaining time for auction end
+     * @param {Object} data — room data
+     * @param {Number} now - used for testing purposes, represents current time
+     * @returns {Object[]} rooms
+     */
+    present(data, now) {
         if (_.isEmpty(data)) {
             return data;
         }
-        const NOW = Date.now();
+        const NOW = now || Date.now();
         return data.map((room) => {
             const bids = _.cloneDeep(room.bids || []).reverse();
-            if (!room || !room.active) {
+            if (!room.active) {
                 return { ...room, bids };
             }
             const current = new Date(room.end - NOW),
@@ -25,6 +32,10 @@ export default class Presenter {
         });
     }
 
+    /**
+     * @desc Presents active rooms sorted by duration, i.e. auctions near ending appear first
+     * @return {Object[]} rooms
+     */
     presentActive(data) {
         return this.present(data)
                 .filter((room) => room.active)
@@ -36,6 +47,10 @@ export default class Presenter {
                 });
     }
 
+    /**
+     * @desc Presents ended rooms, i.e. rooms which aren't active
+     * @return {Object[]} rooms
+     */
     presentEnded(data) {
         return this.present(data).filter((room) => !room.active);
     }

@@ -12,16 +12,31 @@ const MINUTE            = 1000*60,
     DEFAULT_ROOM_NAME   = 'Untitled Room',
     DEFAULT_ROOM_IMAGE  = 'https://penang.equatorial.com/wp-content/uploads/sites/9/2015/06/2016-09-02_hep_deluxe_room-400x200.jpg';
 
+/**
+ * @desc Evaluate whether bid value is above the minimum
+ * @param {Object} params
+ * @param {number} value - value of the bid
+ * @param {number} minimum - minimum value to compare against
+ * @return {HTTPError} error - if the bid was inferior to the minimum value
+ */
 const _isBidValid = ({ value, minimum }) => {
     if (value < minimum) {
         throw new HTTPError(`Invalid bid. Minimum value must be ${minimum}`).BadRequest();
     }
 };
 
+/**
+ * @desc Returns time extension for an auction
+ * @return {number} value - 1 minute if bid was placed on the last minute, otherwise 0
+ */
 const _getAuctionExtension = ({ end, limit }) => {
     return ((end - Date.now()) < limit) ? 1*MINUTE : 0;
 };
 
+/**
+ * @desc Computes highest bid for a room
+ * If bid was 1.05% of current highest bid or if there are no other bids
+ */
 const _computeHighestBid = ({ room, bid }) => {
     if (_.isEmpty(room.bids)) {
         room.highestBid = bid;
@@ -33,6 +48,10 @@ const _computeHighestBid = ({ room, bid }) => {
     }
 };
 
+/**
+ * @desc Is room still active, i.e, is current time between [stard,end]
+ * @returns {boolean} value - true if between [start,end], otherwise false
+ */
 const _isRoomActive = ({ room }) => {
     const now = Date.now();
     return now >= room.start && now < room.end;
@@ -58,12 +77,13 @@ export default class Repository {
      * @param {Object} params
      * @param {string} params.name - room name
      * @param {string} params.image - URL for room image
-     * @param {Date} params.start - start date for auction (UTC), defaults to current time
+     * @param {Date} [params.start = Date.now()] - start date for auction (UTC)
+     * @param {Date} [params.end = DAte.now() + 10 minutes] - end date for auction (UTC)
      * @param {boolean} params.active - whether auction is active
      * @param {string} params.location - location of auction
      * @param {number} params.minimum_bid - minimum bid for this auction
      * @param {Object[]} params.bids - bids on this auction
-     * @return {Promise} room - resolves with room if operation was successful, otherwise rejects with Error.
+     * @return {Promise<Object[]>} room - resolves with room if operation was successful, otherwise rejects with Error.
      */
     create({
         name        = DEFAULT_ROOM_NAME,
@@ -94,6 +114,11 @@ export default class Repository {
 
     }
 
+    /**
+     * @desc Fetches all rooms.
+     * The status of each room is updated to inactive if auction ended
+     * @return {Promise<Object[]>} rooms - resolves with updated rooms
+     */
     getAll() {
         return new Promise((resolve) => {
             this._rooms.forEach((room) => {
@@ -103,6 +128,12 @@ export default class Repository {
         });
     }
 
+    /**
+     * @desc Fetches one room by id.
+     * The status of the room is updated to inactive if auction ended.
+     * @param {string} id - id of the room to fetch
+     * @return {Promise<Object[]>} room - resolves with room if found, or rejects if no ID was passed or room wasn't found
+     */
     getById(id) {
         return new Promise((resolve, reject) => {
 
@@ -124,6 +155,13 @@ export default class Repository {
         });
     }
 
+    /**
+     * @desc Pushes a new bid into an auction's bid list.
+     * @param {Object} params
+     * @param {string} params.id - id of the room to bid
+     * @param {number} params.value - currency value of the bid
+     * @return {Promise<Object[]>} bid — resolves with bid data on success, otherwise rejects
+     */
     bid({ id, value }) {
         return this.getById(id)
             .then(([room]) => { //Validations
@@ -139,15 +177,15 @@ export default class Repository {
                 return room;
             })
             .then((room) => {   //Apply business rules
-                _isBidValid({ value, minimum: room.minimum_bid });
-                room.end += _getAuctionExtension({ end: room.end, limit: 1*MINUTE });
+                _isBidValid({ value, minimum: room.minimum_bid });                      //Is this bid above the minimum?
+                room.end += _getAuctionExtension({ end: room.end, limit: 1*MINUTE });   //If less than one minute is remaining, extend by another minute
 
                 const bid = {
                     bid_id: uuid.v4(),
                     value
                 };
 
-                _computeHighestBid({ room, bid });
+                _computeHighestBid({ room, bid });  //If this bid is a winner so far, update the room with that information
                 room.bids.push(bid);
                 return [bid];
             });

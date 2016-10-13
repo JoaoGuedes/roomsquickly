@@ -6,8 +6,8 @@ export const enrichAuctions = (auctions) => {
             end = start + 10*60*1000;
         return {
             ...auction,
-            start,
-            end
+            end,
+            start
         };
     });
 };
