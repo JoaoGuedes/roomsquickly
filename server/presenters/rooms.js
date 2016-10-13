@@ -40,8 +40,8 @@ export default class Presenter {
         return this.present(data)
                 .filter((room) => room.active)
                 .sort((a,b) => {
-                    const durationA = a.remaining.minutes.toString() + a.remaining.seconds.toString(),
-                        durationB   = b.remaining.minutes.toString() + b.remaining.seconds.toString();
+                    const durationA = `${a.remaining.minutes}${a.remaining.seconds}`,
+                        durationB   = `${b.remaining.minutes}${b.remaining.seconds}`;
 
                     return durationA > durationB;
                 });
