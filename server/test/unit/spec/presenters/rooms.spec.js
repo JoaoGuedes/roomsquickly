@@ -2,9 +2,8 @@ import test from 'tape-catch';
 import _ from 'lodash';
 import nconf from 'nconf';
 import { enrichAuctions } from '~/lib/utils';
-import seed from '~/test/unit/fixtures/rooms';
+import seed from '@/unit/fixtures/rooms';
 import Presenter from '~/presenters/rooms';
-import HTTPError from '~/lib/errors';
 
 let presenter;
 

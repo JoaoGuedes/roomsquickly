@@ -1,7 +1,7 @@
 import Router from 'express';
 
 import { enrichAuctions } from '~/lib/utils';
-import seed from '~/test/unit/fixtures/rooms';
+import seed from '~/repositories/seed';
 import RoomsInteractor from '~/interactors/rooms';
 import RoomsRepository from '~/repositories/rooms';
 import RoomsPresenter from '~/presenters/rooms';

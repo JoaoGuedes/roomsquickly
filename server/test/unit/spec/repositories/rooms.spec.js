@@ -1,6 +1,6 @@
 import test from 'tape-catch';
 import nconf from 'nconf';
-import seed from '~/test/unit/fixtures/rooms';
+import seed from '@/unit/fixtures/rooms';
 import Repository from '~/repositories/rooms';
 import HTTPError from '~/lib/errors';
 
@@ -217,7 +217,7 @@ test('Repository.bid', (t) => {
             value: 100
         }))
         .then(() => {
-            const room = repo._rooms.find((room) => room.id === roomId);                        
+            const room = repo._rooms.find((room) => room.id === roomId);
             t.deepEqual(room.highestBid, room.bids[0], 'the first bid should be the highest');
         })
         .catch((err) => t.fail(err));

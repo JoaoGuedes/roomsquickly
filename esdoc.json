@@ -1,0 +1,5 @@
+{
+    "source": "./server",
+    "destination": "./docs",
+    "excludes": ["\\.*.spec.js$"]
+}

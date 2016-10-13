@@ -7,7 +7,8 @@
         }],
         ["module-alias", [
             { "src": "./server", "expose": "~" },
-            { "src": "./app", "expose": "$" }
+            { "src": "./app", "expose": "$" },
+            { "src": './server/test', "expose": "@" }
         ]]
     ],
     "ignore": [

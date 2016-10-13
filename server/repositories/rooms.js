@@ -78,8 +78,7 @@ export default class Repository {
      * @param {string} params.name - room name
      * @param {string} params.image - URL for room image
      * @param {Date} [params.start = Date.now()] - start date for auction (UTC)
-     * @param {Date} [params.end = DAte.now() + 10 minutes] - end date for auction (UTC)
-     * @param {boolean} params.active - whether auction is active
+     * @param {Date} [params.end = Date.now() + 10 minutes] - end date for auction (UTC)
      * @param {string} params.location - location of auction
      * @param {number} params.minimum_bid - minimum bid for this auction
      * @param {Object[]} params.bids - bids on this auction
