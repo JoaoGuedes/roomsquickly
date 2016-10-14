@@ -1,12 +1,13 @@
 /**
  * Useful functions
  */
-
 export const _fetch = (url) => {
     return fetch(url)
         .then((data) => {
             if (data.status >= 400) {
-                return { error: data.statusText };
+                let error = new Error(data.statusText);
+                error.status = data.status;
+                return { error };
             }
             return data.json().then((data) => ({ data }));
         })

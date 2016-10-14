@@ -104,7 +104,7 @@ const ActiveAuctionLayout = React.createClass({
                 { success ? <Message className="alert alert-success" message={success}/> : '' }
 
                 {/* ERRORS */}
-                { error ? <Message className="alert alert-danger" message={error}/> : '' }
+                { error ? <Message className="alert alert-danger" message={error.message}/> : '' }
             </div>
         );
     }

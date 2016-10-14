@@ -12,7 +12,7 @@ const ErrorLayout = (props) => {
                     <div className="col-sm-8 col-center">
                         <div className="alert alert-danger">
                             <h4>Something went wrong!</h4>
-                            <p>{ error }</p>
+                            <p>{ error.message }</p>
                         </div>
                     </div>
                 </div>
@@ -22,7 +22,7 @@ const ErrorLayout = (props) => {
 };
 
 ErrorLayout.propTypes = {
-    error: React.PropTypes.string
+    error: React.PropTypes.object
 };
 
 export default ErrorLayout;

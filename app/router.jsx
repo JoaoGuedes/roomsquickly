@@ -12,7 +12,7 @@ import ActiveAuctionsLayout from 'components/layouts/list/ActiveAuctions.jsx';
 import EndedAuctionsLayout from 'components/layouts/list/EndedAuctions.jsx';
 import AuctionViewLayout from 'components/layouts/view/AuctionView.jsx';
 
-const Routes = React.createClass({
+const CustomRouter = React.createClass({
     render() {
         return (
             <Router history={browserHistory}>
@@ -33,4 +33,4 @@ const Routes = React.createClass({
     }
 });
 
-export default Routes;
+export default CustomRouter;

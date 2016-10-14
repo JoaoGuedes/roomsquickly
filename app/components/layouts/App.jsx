@@ -2,7 +2,7 @@ import React from 'react';
 import Navigation from '../Navigation.jsx';
 import Footer from '../Footer.jsx';
 
-export const AppLayout = (props) => {
+const AppLayout = (props) => {
     return (
         <div className="container-custom">
             <Navigation/>
@@ -15,3 +15,5 @@ export const AppLayout = (props) => {
 AppLayout.propTypes = {
     children: React.PropTypes.node
 };
+
+export default AppLayout;
