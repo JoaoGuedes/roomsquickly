@@ -8,9 +8,7 @@
     "build": "node_modules/.bin/babel server --out-dir dist/server",
     "server": "node_modules/.bin/nodemon --exec node_modules/.bin/babel-node --presets=es2015 -- server/index.js",
     "app": "./node_modules/.bin/webpack-dev-server --history-api-fallback --compress --inline --hot --content-base dist/ ",
-    "test:server": "node_modules/.bin/nodemon --exec node_modules/.bin/babel-node node_modules/.bin/tape 'server/test/**/*.spec.js' | node_modules/.bin/tap-spec",
-    "test:app": "node_modules/.bin/jest --watch",
-    "coverage": "node_modules/.bin/babel-node node_modules/.bin/isparta cover --report html node_modules/.bin/tape -- 'server/test/**/*.spec.js'",
+    "test": "node_modules/.bin/nodemon --exec node_modules/.bin/babel-node node_modules/.bin/tape 'server/test/**/*.spec.js' | node_modules/.bin/tap-spec",
     "docs": "node_modules/.bin/esdoc -c ./esdoc.json"
   },
   "author": "",
@@ -18,7 +16,6 @@
   "devDependencies": {
     "babel-cli": "^6.10.1",
     "babel-core": "^6.11.4",
-    "babel-jest": "^16.0.0",
     "babel-loader": "^6.2.4",
     "babel-plugin-module-alias": "^1.6.0",
     "babel-plugin-transform-builtin-extend": "^1.1.0",
@@ -28,21 +25,18 @@
     "babel-preset-react": "^6.11.1",
     "babel-preset-stage-2": "^6.11.0",
     "css-loader": "^0.23.1",
-    "enzyme": "^2.4.1",
     "esdoc": "^0.4.7",
     "eslint": "^3.1.1",
     "eslint-plugin-react": "^5.2.2",
     "file-loader": "^0.9.0",
     "imports-loader": "^0.6.5",
     "isparta": "^4.0.0",
-    "jest-cli": "^16.0.1",
     "json-loader": "^0.5.4",
     "morgan": "^1.7.0",
     "nock": "^8.0.0",
     "node-sass": "^3.8.0",
     "nodemon": "^1.9.2",
     "proxyquire": "^1.7.10",
-    "react-addons-test-utils": "^15.3.2",
     "resolve-url-loader": "^1.6.0",
     "sass-loader": "^4.0.0",
     "sinon": "^1.17.4",
@@ -59,7 +53,6 @@
     "bluebird": "^3.4.1",
     "body-parser": "^1.15.2",
     "bootflat": "^2.0.4",
-    "classnames": "^2.2.5",
     "es6-error": "^3.1.0",
     "es6-promise": "^3.2.1",
     "express": "^4.14.0",
@@ -72,22 +65,5 @@
     "request-promise": "^3.0.0",
     "uuid": "^2.0.3",
     "whatwg-fetch": "^1.0.0"
-  },
-  "jest": {
-    "rootDir": "app",
-    "moduleDirectories": ["node_modules", "app"],
-    "moduleNameMapper": {
-      "^.+\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/__mocks__/fileMock.js",
-      "^.+\\.(css|less)$": "<rootDir>/__mocks__/styleMock.js"
-    },
-    "setupFiles": [
-        "./setupJest.js"
-    ],
-    "automock": false,
-    "moduleFileExtensions": [
-      "js",
-      "jsx",
-      "json"
-    ]
   }
 }
