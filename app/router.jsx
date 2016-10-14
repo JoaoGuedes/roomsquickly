@@ -6,7 +6,7 @@ import {
     IndexRoute,
     IndexRedirect
 } from 'react-router';
-import { AppLayout } from 'components/layouts/App.jsx';
+import AppLayout from 'components/layouts/App.jsx';
 import AuctionListLayout from 'components/layouts/list/AuctionList.jsx';
 import ActiveAuctionsLayout from 'components/layouts/list/ActiveAuctions.jsx';
 import EndedAuctionsLayout from 'components/layouts/list/EndedAuctions.jsx';

@@ -59,7 +59,7 @@ const ActiveAuctionsLayout = React.createClass({
             <div>
                 <div className="container">
                     <div className="row">
-                        <div className="col-sm-12">
+                        <div className="col-sm-12 activeAuctionItems">
                             {
                                 collection.length > 0 ?
                                     this.state.collection.map((item, index) => <AuctionItem key={index} data={item} />) :
